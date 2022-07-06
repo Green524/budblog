@@ -3,21 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
     <modules>
-        <module>blog</module>
-        <module>user</module>
+        <module>userdto</module>
+        <module>userservice</module>
     </modules>
 
     <parent>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <groupId>org.springframework.boot</groupId>
-        <version>2.7.1</version>
+        <artifactId>budblog</artifactId>
+        <groupId>com.chenum</groupId>
+        <version>0.0.1</version>
     </parent>
 
-    <groupId>com.chenum</groupId>
-    <artifactId>budblog</artifactId>
+    <artifactId>user</artifactId>
     <version>0.0.1</version>
-    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

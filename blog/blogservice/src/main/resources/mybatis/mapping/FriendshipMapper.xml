@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenum.dao.FriendshipMapper">
+  <resultMap id="BaseResultMap" type="com.chenum.po.Friendship">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="friendship_name" jdbcType="VARCHAR" property="friendshipName" />
+    <result column="avatar_method" jdbcType="TINYINT" property="avatarMethod" />
+    <result column="third_party" jdbcType="VARCHAR" property="thirdParty" />
+    <result column="personalized_url" jdbcType="VARCHAR" property="personalizedUrl" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_reviewer" jdbcType="TIMESTAMP" property="lastReviewer" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, friendship_name, avatar_method, third_party, personalized_url, signature, creator, 
+    create_time, update_time, last_reviewer
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_friendship
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_friendship
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.chenum.po.Friendship">
+    insert into tb_friendship (id, friendship_name, avatar_method, 
+      third_party, personalized_url, signature, 
+      creator, create_time, update_time, 
+      last_reviewer)
+    values (#{id,jdbcType=VARCHAR}, #{friendshipName,jdbcType=VARCHAR}, #{avatarMethod,jdbcType=TINYINT}, 
+      #{thirdParty,jdbcType=VARCHAR}, #{personalizedUrl,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{lastReviewer,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chenum.po.Friendship">
+    insert into tb_friendship
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="friendshipName != null">
+        friendship_name,
+      </if>
+      <if test="avatarMethod != null">
+        avatar_method,
+      </if>
+      <if test="thirdParty != null">
+        third_party,
+      </if>
+      <if test="personalizedUrl != null">
+        personalized_url,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="lastReviewer != null">
+        last_reviewer,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="friendshipName != null">
+        #{friendshipName,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarMethod != null">
+        #{avatarMethod,jdbcType=TINYINT},
+      </if>
+      <if test="thirdParty != null">
+        #{thirdParty,jdbcType=VARCHAR},
+      </if>
+      <if test="personalizedUrl != null">
+        #{personalizedUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastReviewer != null">
+        #{lastReviewer,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chenum.po.Friendship">
+    update tb_friendship
+    <set>
+      <if test="friendshipName != null">
+        friendship_name = #{friendshipName,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarMethod != null">
+        avatar_method = #{avatarMethod,jdbcType=TINYINT},
+      </if>
+      <if test="thirdParty != null">
+        third_party = #{thirdParty,jdbcType=VARCHAR},
+      </if>
+      <if test="personalizedUrl != null">
+        personalized_url = #{personalizedUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null">
+        signature = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastReviewer != null">
+        last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chenum.po.Friendship">
+    update tb_friendship
+    set friendship_name = #{friendshipName,jdbcType=VARCHAR},
+      avatar_method = #{avatarMethod,jdbcType=TINYINT},
+      third_party = #{thirdParty,jdbcType=VARCHAR},
+      personalized_url = #{personalizedUrl,jdbcType=VARCHAR},
+      signature = #{signature,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

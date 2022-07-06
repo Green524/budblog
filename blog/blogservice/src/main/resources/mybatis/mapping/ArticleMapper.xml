@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenum.dao.ArticleMapper">
+  <resultMap id="BaseResultMap" type="com.chenum.po.Article">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="TEXT" property="content" />
+    <result column="markdown" jdbcType="VARCHAR" property="markdown" />
+    <result column="author" jdbcType="JSON" property="author" />
+    <result column="content_tag" jdbcType="TEXT" property="contentTag" />
+    <result column="word_count" jdbcType="BIGINT" property="wordCount" />
+    <result column="is_like" jdbcType="BIT" property="isLike" />
+    <result column="is_comment" jdbcType="BIT" property="isComment" />
+    <result column="is_admiration" jdbcType="BIT" property="isAdmiration" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="last_reviewer" jdbcType="TIMESTAMP" property="lastReviewer" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.chenum.po.Article">
+    <result column="contribution" jdbcType="LONGVARCHAR" property="contribution" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, content, markdown, author, content_tag, word_count, is_like, is_comment, 
+    is_admiration, creator, create_time, update_time, last_reviewer
+  </sql>
+  <sql id="Blob_Column_List">
+    contribution
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_article
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_article
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.chenum.po.Article">
+    insert into tb_article (id, title, content, 
+      markdown, author, content_tag, 
+      word_count, is_like, is_comment, 
+      is_admiration, creator, create_time, 
+      update_time, last_reviewer, contribution
+      )
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=TEXT}, 
+      #{markdown,jdbcType=VARCHAR}, #{author,jdbcType=JSON}, #{contentTag,jdbcType=TEXT}, 
+      #{wordCount,jdbcType=BIGINT}, #{isLike,jdbcType=BIT}, #{isComment,jdbcType=BIT}, 
+      #{isAdmiration,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=TIMESTAMP}, #{contribution,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chenum.po.Article">
+    insert into tb_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="markdown != null">
+        markdown,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="contentTag != null">
+        content_tag,
+      </if>
+      <if test="wordCount != null">
+        word_count,
+      </if>
+      <if test="isLike != null">
+        is_like,
+      </if>
+      <if test="isComment != null">
+        is_comment,
+      </if>
+      <if test="isAdmiration != null">
+        is_admiration,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="lastReviewer != null">
+        last_reviewer,
+      </if>
+      <if test="contribution != null">
+        contribution,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=TEXT},
+      </if>
+      <if test="markdown != null">
+        #{markdown,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=JSON},
+      </if>
+      <if test="contentTag != null">
+        #{contentTag,jdbcType=TEXT},
+      </if>
+      <if test="wordCount != null">
+        #{wordCount,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        #{isLike,jdbcType=BIT},
+      </if>
+      <if test="isComment != null">
+        #{isComment,jdbcType=BIT},
+      </if>
+      <if test="isAdmiration != null">
+        #{isAdmiration,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastReviewer != null">
+        #{lastReviewer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contribution != null">
+        #{contribution,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chenum.po.Article">
+    update tb_article
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=TEXT},
+      </if>
+      <if test="markdown != null">
+        markdown = #{markdown,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=JSON},
+      </if>
+      <if test="contentTag != null">
+        content_tag = #{contentTag,jdbcType=TEXT},
+      </if>
+      <if test="wordCount != null">
+        word_count = #{wordCount,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        is_like = #{isLike,jdbcType=BIT},
+      </if>
+      <if test="isComment != null">
+        is_comment = #{isComment,jdbcType=BIT},
+      </if>
+      <if test="isAdmiration != null">
+        is_admiration = #{isAdmiration,jdbcType=BIT},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastReviewer != null">
+        last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contribution != null">
+        contribution = #{contribution,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chenum.po.Article">
+    update tb_article
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=TEXT},
+      markdown = #{markdown,jdbcType=VARCHAR},
+      author = #{author,jdbcType=JSON},
+      content_tag = #{contentTag,jdbcType=TEXT},
+      word_count = #{wordCount,jdbcType=BIGINT},
+      is_like = #{isLike,jdbcType=BIT},
+      is_comment = #{isComment,jdbcType=BIT},
+      is_admiration = #{isAdmiration,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP},
+      contribution = #{contribution,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chenum.po.Article">
+    update tb_article
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=TEXT},
+      markdown = #{markdown,jdbcType=VARCHAR},
+      author = #{author,jdbcType=JSON},
+      content_tag = #{contentTag,jdbcType=TEXT},
+      word_count = #{wordCount,jdbcType=BIGINT},
+      is_like = #{isLike,jdbcType=BIT},
+      is_comment = #{isComment,jdbcType=BIT},
+      is_admiration = #{isAdmiration,jdbcType=BIT},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
