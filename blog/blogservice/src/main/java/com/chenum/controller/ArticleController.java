@@ -1,14 +1,23 @@
 package com.chenum.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import com.chenum.po.Article;
+import com.chenum.service.IArticleService;
+import com.chenum.vo.ArticleVO;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 @RestController
 public class ArticleController {
 
-    @RequestMapping("/hello/{name}")
-    public String hello(@PathVariable String name){
-        return "hello" + name;
+    @Resource
+    private IArticleService iArticleService;
+
+    @RequestMapping("/add")
+    public Article hello(@RequestBody(required = false) ArticleVO articleVO){
+        return iArticleService.add(articleVO);
     }
+
 }

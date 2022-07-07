@@ -4,10 +4,10 @@
   <resultMap id="BaseResultMap" type="com.chenum.po.Article">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="TEXT" property="content" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="markdown" jdbcType="VARCHAR" property="markdown" />
-    <result column="author" jdbcType="JSON" property="author" />
-    <result column="content_tag" jdbcType="TEXT" property="contentTag" />
+    <result column="author" jdbcType="OTHER" property="author" />
+    <result column="content_tag" jdbcType="VARCHAR" property="contentTag" />
     <result column="word_count" jdbcType="BIGINT" property="wordCount" />
     <result column="is_like" jdbcType="BIT" property="isLike" />
     <result column="is_comment" jdbcType="BIT" property="isComment" />
@@ -46,8 +46,8 @@
       is_admiration, creator, create_time, 
       update_time, last_reviewer, contribution
       )
-    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=TEXT}, 
-      #{markdown,jdbcType=VARCHAR}, #{author,jdbcType=JSON}, #{contentTag,jdbcType=TEXT}, 
+    values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{markdown,jdbcType=VARCHAR}, #{author,jdbcType=OTHER}, #{contentTag,jdbcType=VARCHAR}, 
       #{wordCount,jdbcType=BIGINT}, #{isLike,jdbcType=BIT}, #{isComment,jdbcType=BIT}, 
       #{isAdmiration,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=TIMESTAMP}, #{contribution,jdbcType=LONGVARCHAR}
@@ -110,16 +110,16 @@
         #{title,jdbcType=VARCHAR},
       </if>
       <if test="content != null">
-        #{content,jdbcType=TEXT},
+        #{content,jdbcType=VARCHAR},
       </if>
       <if test="markdown != null">
         #{markdown,jdbcType=VARCHAR},
       </if>
       <if test="author != null">
-        #{author,jdbcType=JSON},
+        #{author,jdbcType=OTHER},
       </if>
       <if test="contentTag != null">
-        #{contentTag,jdbcType=TEXT},
+        #{contentTag,jdbcType=VARCHAR},
       </if>
       <if test="wordCount != null">
         #{wordCount,jdbcType=BIGINT},
@@ -157,16 +157,16 @@
         title = #{title,jdbcType=VARCHAR},
       </if>
       <if test="content != null">
-        content = #{content,jdbcType=TEXT},
+        content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="markdown != null">
         markdown = #{markdown,jdbcType=VARCHAR},
       </if>
       <if test="author != null">
-        author = #{author,jdbcType=JSON},
+        author = #{author,jdbcType=OTHER},
       </if>
       <if test="contentTag != null">
-        content_tag = #{contentTag,jdbcType=TEXT},
+        content_tag = #{contentTag,jdbcType=VARCHAR},
       </if>
       <if test="wordCount != null">
         word_count = #{wordCount,jdbcType=BIGINT},
@@ -201,10 +201,10 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chenum.po.Article">
     update tb_article
     set title = #{title,jdbcType=VARCHAR},
-      content = #{content,jdbcType=TEXT},
+      content = #{content,jdbcType=VARCHAR},
       markdown = #{markdown,jdbcType=VARCHAR},
-      author = #{author,jdbcType=JSON},
-      content_tag = #{contentTag,jdbcType=TEXT},
+      author = #{author,jdbcType=OTHER},
+      content_tag = #{contentTag,jdbcType=VARCHAR},
       word_count = #{wordCount,jdbcType=BIGINT},
       is_like = #{isLike,jdbcType=BIT},
       is_comment = #{isComment,jdbcType=BIT},
@@ -219,10 +219,10 @@
   <update id="updateByPrimaryKey" parameterType="com.chenum.po.Article">
     update tb_article
     set title = #{title,jdbcType=VARCHAR},
-      content = #{content,jdbcType=TEXT},
+      content = #{content,jdbcType=VARCHAR},
       markdown = #{markdown,jdbcType=VARCHAR},
-      author = #{author,jdbcType=JSON},
-      content_tag = #{contentTag,jdbcType=TEXT},
+      author = #{author,jdbcType=OTHER},
+      content_tag = #{contentTag,jdbcType=VARCHAR},
       word_count = #{wordCount,jdbcType=BIGINT},
       is_like = #{isLike,jdbcType=BIT},
       is_comment = #{isComment,jdbcType=BIT},
