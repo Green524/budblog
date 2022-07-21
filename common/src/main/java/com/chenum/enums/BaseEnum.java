@@ -2,7 +2,11 @@ package com.chenum.enums;
 
 public enum BaseEnum {
     OK(200,"操作成功!",null),
-    ERROR(500,"操作失败!",null)
+    ERROR(500,"操作失败!",null),
+
+    PARAMS_ERROR(5001,"参数异常",null),
+
+    INERT_ERROR(6001,"Insert异常",null);
     ;
     private int code;
     private String message;

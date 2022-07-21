@@ -15,23 +15,15 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="last_reviewer" jdbcType="TIMESTAMP" property="lastReviewer" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.chenum.po.Article">
-    <result column="contribution" jdbcType="LONGVARCHAR" property="contribution" />
+    <result column="last_reviewer" jdbcType="OTHER" property="lastReviewer" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, content, markdown, author, content_tag, word_count, is_like, is_comment, 
+    id, title, content, markdown, author, content_tag, word_count, contribution,is_like, is_comment,
     is_admiration, creator, create_time, update_time, last_reviewer
   </sql>
-  <sql id="Blob_Column_List">
-    contribution
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from tb_article
     where id = #{id,jdbcType=VARCHAR}
   </select>
@@ -39,7 +31,10 @@
     delete from tb_article
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.chenum.po.Article">
+  <insert id="insert" parameterType="com.chenum.po.Article" useGeneratedKeys="true" keyProperty="id">
+    <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+      SELECT UUID_SHORT() FROM DUAL
+    </selectKey>
     insert into tb_article (id, title, content, 
       markdown, author, content_tag, 
       word_count, is_like, is_comment, 
@@ -50,8 +45,9 @@
       #{markdown,jdbcType=VARCHAR}, #{author,jdbcType=OTHER}, #{contentTag,jdbcType=VARCHAR}, 
       #{wordCount,jdbcType=BIGINT}, #{isLike,jdbcType=BIT}, #{isComment,jdbcType=BIT}, 
       #{isAdmiration,jdbcType=BIT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=TIMESTAMP}, #{contribution,jdbcType=LONGVARCHAR}
+      #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=TIMESTAMP}, #{contribution,jdbcType=OTHER}
       )
+
   </insert>
   <insert id="insertSelective" parameterType="com.chenum.po.Article">
     insert into tb_article

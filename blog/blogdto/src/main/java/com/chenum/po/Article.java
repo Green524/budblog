@@ -30,7 +30,7 @@ public class Article implements Serializable {
 
     private Date updateTime;
 
-    private Date lastReviewer;
+    private String lastReviewer;
 
     private String contribution;
 
@@ -140,11 +140,11 @@ public class Article implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public Date getLastReviewer() {
+    public String getLastReviewer() {
         return lastReviewer;
     }
 
-    public void setLastReviewer(Date lastReviewer) {
+    public void setLastReviewer(String lastReviewer) {
         this.lastReviewer = lastReviewer;
     }
 
@@ -154,5 +154,26 @@ public class Article implements Serializable {
 
     public void setContribution(String contribution) {
         this.contribution = contribution == null ? null : contribution.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", markdown='" + markdown + '\'' +
+                ", author='" + author + '\'' +
+                ", contentTag='" + contentTag + '\'' +
+                ", wordCount=" + wordCount +
+                ", isLike=" + isLike +
+                ", isComment=" + isComment +
+                ", isAdmiration=" + isAdmiration +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", lastReviewer=" + lastReviewer +
+                ", contribution='" + contribution + '\'' +
+                '}';
     }
 }

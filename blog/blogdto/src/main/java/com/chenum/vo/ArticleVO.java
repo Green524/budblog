@@ -2,6 +2,7 @@ package com.chenum.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ArticleVO implements Serializable {
     private String id;
@@ -10,7 +11,7 @@ public class ArticleVO implements Serializable {
 
     private String content;
 
-    private String author;
+    private List<Object> author;
 
     private String contentTag;
 
@@ -24,6 +25,10 @@ public class ArticleVO implements Serializable {
 
     private String contribution;
 
+    private Date createTime;
+
+    private Date updateTime;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -31,7 +36,7 @@ public class ArticleVO implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getTitle() {
@@ -39,7 +44,7 @@ public class ArticleVO implements Serializable {
     }
 
     public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
+        this.title = title;
     }
 
     public String getContent() {
@@ -47,15 +52,15 @@ public class ArticleVO implements Serializable {
     }
 
     public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+        this.content = content;
     }
 
-    public String getAuthor() {
+    public List<Object> getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author == null ? null : author.trim();
+    public void setAuthor(List<Object> author) {
+        this.author = author;
     }
 
     public String getContentTag() {
@@ -63,31 +68,31 @@ public class ArticleVO implements Serializable {
     }
 
     public void setContentTag(String contentTag) {
-        this.contentTag = contentTag == null ? null : contentTag.trim();
+        this.contentTag = contentTag;
     }
 
-    public Boolean getIsLike() {
+    public Boolean getLike() {
         return isLike;
     }
 
-    public void setIsLike(Boolean isLike) {
-        this.isLike = isLike;
+    public void setLike(Boolean like) {
+        isLike = like;
     }
 
-    public Boolean getIsComment() {
+    public Boolean getComment() {
         return isComment;
     }
 
-    public void setIsComment(Boolean isComment) {
-        this.isComment = isComment;
+    public void setComment(Boolean comment) {
+        isComment = comment;
     }
 
-    public Boolean getIsAdmiration() {
+    public Boolean getAdmiration() {
         return isAdmiration;
     }
 
-    public void setIsAdmiration(Boolean isAdmiration) {
-        this.isAdmiration = isAdmiration;
+    public void setAdmiration(Boolean admiration) {
+        isAdmiration = admiration;
     }
 
     public String getCreator() {
@@ -95,7 +100,7 @@ public class ArticleVO implements Serializable {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
 
     public String getContribution() {
@@ -103,6 +108,40 @@ public class ArticleVO implements Serializable {
     }
 
     public void setContribution(String contribution) {
-        this.contribution = contribution == null ? null : contribution.trim();
+        this.contribution = contribution;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ArticleVO{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", author=" + author +
+                ", contentTag='" + contentTag + '\'' +
+                ", isLike=" + isLike +
+                ", isComment=" + isComment +
+                ", isAdmiration=" + isAdmiration +
+                ", creator='" + creator + '\'' +
+                ", contribution='" + contribution + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }
