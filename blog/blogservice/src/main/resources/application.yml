@@ -1,5 +1,5 @@
 server:
-  port: 8848
+  port: 8842
 spring:
   jackson:
     default-property-inclusion: non_null

@@ -39,6 +39,7 @@ public class ArticleServiceImpl implements IArticleService {
             throw new BusinessException(BaseEnum.INERT_ERROR);
         }
         Article record = articleMapper.selectByPrimaryKey(article.getId());
+        System.out.println();
         return WrapMapper.ok(record);
     }
 

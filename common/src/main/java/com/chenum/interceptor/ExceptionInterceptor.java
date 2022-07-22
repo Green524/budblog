@@ -18,6 +18,7 @@ public class ExceptionInterceptor {
     @ResponseBody
     public Wrapper<?> businessException(BusinessException be){
         log.error("发生业务异常：{}",be.getMessage());
+        be.printStackTrace();
         return WrapMapper.error(be);
     }
 }
