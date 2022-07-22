@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class ArticleVO implements Serializable {
+public class ArticleVO{
     private String id;
 
     private String title;
@@ -28,8 +28,6 @@ public class ArticleVO implements Serializable {
     private Date createTime;
 
     private Date updateTime;
-
-    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -71,27 +69,27 @@ public class ArticleVO implements Serializable {
         this.contentTag = contentTag;
     }
 
-    public Boolean getLike() {
+    public Boolean getIsLike() {
         return isLike;
     }
 
-    public void setLike(Boolean like) {
+    public void setIsLike(Boolean like) {
         isLike = like;
     }
 
-    public Boolean getComment() {
+    public Boolean getIsComment() {
         return isComment;
     }
 
-    public void setComment(Boolean comment) {
+    public void setIsComment(Boolean comment) {
         isComment = comment;
     }
 
-    public Boolean getAdmiration() {
+    public Boolean getIsAdmiration() {
         return isAdmiration;
     }
 
-    public void setAdmiration(Boolean admiration) {
+    public void setIsAdmiration(Boolean admiration) {
         isAdmiration = admiration;
     }
 

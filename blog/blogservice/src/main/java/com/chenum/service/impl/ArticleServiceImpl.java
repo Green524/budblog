@@ -8,9 +8,9 @@ import com.chenum.po.Article;
 import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
+import com.chenum.util.BeanUtils;
 import com.chenum.vo.ArticleVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -31,15 +31,15 @@ public class ArticleServiceImpl implements IArticleService {
             throw new BusinessException(BaseEnum.ERROR);
         }
         Article article = new Article();
-        BeanUtils.copyProperties(articleVO,article);
+        BeanUtils.copyProperties(articleVO,article,"serialVersionUID");
         article.setLastReviewer("[]");
         article.setContribution("[]");
+        System.out.println(article);
         int updates = articleMapper.insert(article);
         if (updates == 0){
             throw new BusinessException(BaseEnum.INERT_ERROR);
         }
         Article record = articleMapper.selectByPrimaryKey(article.getId());
-        System.out.println();
         return WrapMapper.ok(record);
     }
 
