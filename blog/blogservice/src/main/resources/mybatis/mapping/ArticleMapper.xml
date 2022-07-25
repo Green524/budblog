@@ -21,11 +21,69 @@
     id, title, content, markdown, author, content_tag, word_count, contribution,is_like, is_comment,
     is_admiration, creator, create_time, update_time, last_reviewer
   </sql>
+  <sql id="Conditional_List">
+    where 1 = 1
+    <if test="id != null and id != ''">
+      and id = ${id}
+    </if>
+    <if test="title != null and title != ''">
+      and title = #{title}
+    </if>
+    <if test="content != null and content != ''">
+      and content like concat('%',#{content},'%')
+    </if>
+    <if test="markdown != null and markdown != ''">
+      and markdown like concat('%',#{markdown},'%')
+    </if>
+    <if test="author != null and author != ''">
+      and author = #{author}
+    </if>
+    <if test="contentTag != null and contentTag != ''">
+      and content_tag like concat('%',#{markdown},'%')
+    </if>
+    <if test="wordCount != null">
+      and word_count = #{wordCount}
+    </if>
+    <if test="isLike != null">
+      and is_like = #{isLike}
+    </if>
+    <if test="isComment != null">
+      and is_comment = #{isComment}
+    </if>
+    <if test="isAdmiration != null">
+      and is_admiration = #{isAdmiration}
+    </if>
+    <if test="creator != null and creator != ''">
+      and creator = #{creator}
+    </if>
+    <if test="createTime != null">
+      and create_time = #{createTime}
+    </if>
+    <if test="updateTime != null">
+      and update_time = #{updateTime}
+    </if>
+    <if test="lastReviewer != null and lastReviewer != ''">
+      and last_reviewer like concat('%',#{lastReviewer},'%')
+    </if>
+    <if test="contribution != null and lastReviewer != ''">
+      and contribution like concat('%',#{contribution},'%')
+    </if>
+    <if test="beginTime != null and entTime != null">
+      and create_time between #{beginTime} and #{endTime}
+    </if>
+    order by create_time desc
+  </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_article
     where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPage" parameterType="com.chenum.vo.ArticleVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_article 
+    <include refid="Conditional_List" />
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_article

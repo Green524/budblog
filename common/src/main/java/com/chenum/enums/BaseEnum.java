@@ -1,13 +1,18 @@
 package com.chenum.enums;
 
 public enum BaseEnum {
-    OK(200,"操作成功!",null),
-    ERROR(500,"操作失败!",null),
+    OK(200,"操作成功!"),
+    ERROR(500,"操作失败!"),
 
-    PARAMS_ERROR(5001,"参数异常",null),
+    PARAMS_ERROR(5001,"参数异常"),
 
-    INERT_ERROR(6001,"Insert异常",null);
+    INERT_ERROR(6001,"Insert异常"),
+
+    DELETE_ERROR(6002,"Delete异常"),
+
+    SELECT_ERROR(6003,"Select异常")
     ;
+
     private int code;
     private String message;
     private Object data;
@@ -16,6 +21,10 @@ public enum BaseEnum {
         this.code = code;
         this.message = message;
         this.data = data;
+    }
+    BaseEnum(int code, String message) {
+        this.code = code;
+        this.message = message;
     }
 
     public int code() {

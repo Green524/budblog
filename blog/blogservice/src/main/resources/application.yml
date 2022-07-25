@@ -11,6 +11,8 @@ spring:
     url: jdbc:mysql://115.29.201.100:3306/db_blog?autoReconnect=true&useUnicode=true&characterEncoding=utf-8
     username: root
     password: linzifeng524.
+  main:
+    banner-mode: off
 mybatis:
   mapper-locations: classpath:/mybatis/mapping/*.xml
   type-aliases-package: com.chenum.po

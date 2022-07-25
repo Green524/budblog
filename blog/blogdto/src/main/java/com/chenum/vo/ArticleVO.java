@@ -1,10 +1,11 @@
 package com.chenum.vo;
 
-import java.io.Serializable;
+import com.chenum.entity.BaseVO;
+
 import java.util.Date;
 import java.util.List;
 
-public class ArticleVO{
+public class ArticleVO extends BaseVO {
     private String id;
 
     private String title;
@@ -23,7 +24,7 @@ public class ArticleVO{
 
     private String creator;
 
-    private String contribution;
+    private List<Object> contribution;
 
     private Date createTime;
 
@@ -101,11 +102,11 @@ public class ArticleVO{
         this.creator = creator;
     }
 
-    public String getContribution() {
+    public List<Object> getContribution() {
         return contribution;
     }
 
-    public void setContribution(String contribution) {
+    public void setContribution(List<Object> contribution) {
         this.contribution = contribution;
     }
 

@@ -2,50 +2,65 @@ package com.chenum.util;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 @Slf4j
 public class BeanUtils {
 
-    public static void copyProperties(Object source,Object target,String...ignoreField){
+    /**
+     * 将相同field的属性copy到target,目前只对List进行处理（@Code JsonUtil.toJsonString(value)），
+     * 如果是别的类型不兼容，可能会出现copy失败
+     * @param source
+     * @param target
+     * @param ignoreField
+     */
+    public static void copyProperties(Object source, Object target, String... ignoreField) {
         assert source != null && target != null;
-        try {
-            Map<String,Object> map = entityToMap(source);
-            Class<?> targetSource = target.getClass();
-            Field[] fields = targetSource.getDeclaredFields();
-            List<String> ignore = Arrays.stream(ignoreField).toList();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                String name = field.getName();
-                if (ignore.contains(name)){
+        Map<String, Object> map = entityToMap(source);
+        Class<?> targetSource = target.getClass();
+        List<String> ignoreFields = Arrays.stream(ignoreField).toList();
+        for (String s : map.keySet()) {
+            try {
+                if (ignoreFields.contains(s) ){
                     continue;
                 }
-                Object value = map.get(name);
-                if (value instanceof List){
+                Object value = map.get(s);
+                Method getMethod = targetSource.getMethod(FieldUtils.getter(s));
+                Class<?> FieldType = getMethod.getReturnType();
+                Method method = targetSource.getDeclaredMethod(FieldUtils.setter(s), FieldType);
+                if (value instanceof List<?>) {
                     value = JsonUtil.toJsonString(value);
                 }
-                field.set(target,value);
-            }
-        }catch (IllegalAccessException iae){
-            log.error("实体转换失败");
-            iae.printStackTrace();
-            throw new RuntimeException(iae.getMessage());
-        } catch (InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+                method.invoke(target, value);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException nsme) {
 
+            }
+        }
     }
-    public static Map<String,Object> entityToMap(Object entity) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+    /**
+     * 实体属性转成Map
+     * @param entity
+     * @return
+     */
+    public static Map<String, Object> entityToMap(Object entity) {
         Class<?> entityClass = entity.getClass();
-        Field[] fields = entityClass.getDeclaredFields();
-        Map<String,Object> map = new HashMap<>();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            String name = field.getName();
-            Object value = field.get(entity);
-            map.put(name,value);
+        Method[] methods = entityClass.getMethods();
+        Map<String, Object> map = new HashMap<>();
+        for (Method method : methods) {
+            String methodName = method.getName();
+            if (methodName.startsWith("get")) {
+                try {
+                    Object value = method.invoke(entity);
+                    map.put(FieldUtils.field(methodName), value);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+
         }
         return map;
     }

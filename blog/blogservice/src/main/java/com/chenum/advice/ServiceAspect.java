@@ -1,7 +1,10 @@
 package com.chenum.advice;
 
+import com.chenum.constant.VField;
 import com.chenum.enums.BaseEnum;
 import com.chenum.exception.BusinessException;
+import com.chenum.util.FieldUtils;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -12,18 +15,19 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Objects;
 
 @Slf4j
 @Component
 @Aspect
-public class ServiceAspect{
+public class ServiceAspect {
 
     @Before("@annotation(com.chenum.advice.ParameterCheckAdvice)")
     @Order(Integer.MIN_VALUE)
-    public void before(JoinPoint jp) throws NoSuchFieldException, IllegalAccessException {
+    public void parameterCheckBefore(JoinPoint jp) throws NoSuchFieldException, IllegalAccessException {
         MethodSignature methodSignature = (MethodSignature) jp.getSignature();
         ParameterCheckAdvice parameterCheckAdvice = methodSignature.getMethod().getAnnotation(ParameterCheckAdvice.class);
         //需要检查的field
@@ -31,32 +35,52 @@ public class ServiceAspect{
         int order = parameterCheckAdvice.order();
         Object[] args = jp.getArgs();
         Object arg = args[order];
+        if (Objects.isNull(arg)) {
+            log.error("parameter is null");
+            throw new BusinessException(BaseEnum.PARAMS_ERROR);
+        }
         Class<?> argClass = arg.getClass();
         for (String parameter : parameters) {
             Field field = argClass.getDeclaredField(parameter);
             field.setAccessible(true);
             Object value = field.get(arg);
-            if (StringUtils.equals(parameter,"createTime") || StringUtils.equals(parameter,"updateTime")){
+            if (StringUtils.equals(parameter, VField.CREATE_TIME) || StringUtils.equals(parameter, VField.UPDATE_TIME)) {
                 value = new Date();
-                field.set(arg,value);
+                field.set(arg, value);
             }
-            if (value instanceof String valueOfStr){
-                if (StringUtils.isEmpty(valueOfStr)){
-                    log.error("parameter {} is {}",parameter,value);
+            if (value instanceof String valueOfStr) {
+                if (StringUtils.isEmpty(valueOfStr)) {
+                    log.error("parameter {} is {}", parameter, VField.NULL);
                     throw new BusinessException(BaseEnum.PARAMS_ERROR).setData(valueOfStr);
                 }
-            }else if (value instanceof Date valueOfDate){
-                if (Objects.isNull(valueOfDate)){
-                    log.error("parameter {} is {}",parameter,value);
-                    throw new BusinessException(BaseEnum.PARAMS_ERROR).setData(valueOfDate);
-                }
-            }else{
-                if (Objects.isNull(value)){
-                    log.error("parameter {} is {}",parameter, null);
+            } else {
+                if (Objects.isNull(value)) {
+                    log.error("parameter {} is {}", parameter, VField.NULL);
                     throw new BusinessException(BaseEnum.PARAMS_ERROR);
                 }
             }
         }
-        System.out.println(arg);
+    }
+
+    @Before("@annotation(com.chenum.advice.Page)")
+    @Order(Integer.MIN_VALUE + 1)
+    public void pageHelperBefore(JoinPoint jp) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        MethodSignature methodSignature = (MethodSignature) jp.getSignature();
+        Page page = methodSignature.getMethod().getAnnotation(Page.class);
+        if (Objects.nonNull(page)) {
+            int order = page.order();
+            Object[] args = jp.getArgs();
+            Object arg = args[order];
+            if (Objects.isNull(arg)) {
+                log.error("parameter is null");
+                throw new BusinessException(BaseEnum.PARAMS_ERROR);
+            }
+            Class clazz = arg.getClass();
+            Method getPageNum = clazz.getMethod(FieldUtils.getter(VField.PAGE_NUM));
+            Method getPageSize = clazz.getMethod(FieldUtils.getter(VField.PAGE_SIZE));
+            int pageNum = (int) getPageNum.invoke(arg);
+            int pageSize = (int) getPageSize.invoke(arg);
+            PageHelper.startPage(pageNum, pageSize);
+        }
     }
 }
