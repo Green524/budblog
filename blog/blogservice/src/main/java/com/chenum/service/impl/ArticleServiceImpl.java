@@ -11,6 +11,7 @@ import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
 import com.chenum.util.BeanUtils;
 import com.chenum.util.JsonUtil;
+import com.chenum.util.MarkdownUtil;
 import com.chenum.vo.ArticleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +45,7 @@ public class ArticleServiceImpl implements IArticleService {
             throw new BusinessException(BaseEnum.INERT_ERROR);
         }
         Article record = articleMapper.selectByPrimaryKey(article.getId());
+        content(record);
         return WrapMapper.ok(record);
     }
 
@@ -62,6 +64,7 @@ public class ArticleServiceImpl implements IArticleService {
     public Wrapper<List<Article>> selectByPage(ArticleVO articleVO) {
         Map<String,Object> params = BeanUtils.entityToMap(articleVO);
         List<Article> list = articleMapper.selectByPage(params);
+        list.forEach(this::content);
         return WrapMapper.ok(list);
     }
 
@@ -87,7 +90,12 @@ public class ArticleServiceImpl implements IArticleService {
             throw new BusinessException(BaseEnum.PARAMS_ERROR).setData(id);
         }
         Article article = articleMapper.selectByPrimaryKey(id);
-        article.getContent().replace("\n","");
+        content(article);
         return WrapMapper.ok(article);
+    }
+
+
+    private void content(Article article){
+        article.setContent(MarkdownUtil.md2Html(article.getContent()));
     }
 }
