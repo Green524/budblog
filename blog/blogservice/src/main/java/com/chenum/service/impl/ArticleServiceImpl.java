@@ -10,14 +10,18 @@ import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
 import com.chenum.util.BeanUtils;
+import com.chenum.util.JsonUtil;
 import com.chenum.vo.ArticleVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.chenum.constant.VField.*;
 
@@ -32,11 +36,9 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     @ParameterCheckAdvice(parameters = {"createTime","updateTime","title"})
     public Wrapper<Article> add(ArticleVO articleVO) {
-        System.out.println(articleVO);
         Article article = new Article();
         BeanUtils.copyProperties(articleVO,article,SERIAL_VERSION_UID);
         article.setLastReviewer("[]");
-        System.out.println(article);
         int updates = articleMapper.insert(article);
         if (updates == 0){
             throw new BusinessException(BaseEnum.INERT_ERROR);
@@ -64,7 +66,28 @@ public class ArticleServiceImpl implements IArticleService {
     }
 
     @Override
+    @ParameterCheckAdvice(parameters = "id")
     public Wrapper<Article> updateOne(ArticleVO articleVO) {
-        return null;
+        String id = articleVO.getId();
+        Article article = articleMapper.selectByPrimaryKey(id);
+        if (Objects.isNull(article)){
+            throw new BusinessException(BaseEnum.SELECT_ERROR);
+        }
+        BeanUtils.copyProperties(articleVO,article,"id");
+        article.setUpdateTime(new Date());
+        article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
+        long updates = articleMapper.updateByPrimaryKeySelective(article);
+
+        return WrapMapper.ok(articleMapper.selectByPrimaryKey(id));
+    }
+
+    @Override
+    public Wrapper<Article> query(String id) {
+        if (StringUtils.isEmpty(id)){
+            throw new BusinessException(BaseEnum.PARAMS_ERROR).setData(id);
+        }
+        Article article = articleMapper.selectByPrimaryKey(id);
+        article.getContent().replace("\n","");
+        return WrapMapper.ok(article);
     }
 }

@@ -18,4 +18,7 @@ public interface IArticleService {
 
     Wrapper<Article> updateOne(ArticleVO articleVO);
 
+
+    Wrapper<Article> query( String id);
+
 }

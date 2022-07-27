@@ -17,12 +17,12 @@ public class ArticleController {
     private IArticleService iArticleService;
 
     @PutMapping("/add")
-    public Wrapper<Article> add(@RequestBody(required = false) ArticleVO articleVO){
+    public Wrapper<Article> add(ArticleVO articleVO){
         return iArticleService.add(articleVO);
     }
 
     @DeleteMapping("/del")
-    public Wrapper<Boolean> del(@RequestBody(required = false) ArticleVO articleVO){
+    public Wrapper<Boolean> del(ArticleVO articleVO){
         return iArticleService.del(articleVO);
     }
 
@@ -31,6 +31,16 @@ public class ArticleController {
         return iArticleService.selectByPage(articleVO);
     }
 
+
+    @PutMapping("/update")
+    public Wrapper<Article> update(ArticleVO articleVO){
+        return iArticleService.updateOne(articleVO);
+    }
+
+    @GetMapping("/query/{id}")
+    public Wrapper<Article> query(@PathVariable String id){
+        return iArticleService.query(id);
+    }
 
 
 }
