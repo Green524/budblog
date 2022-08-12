@@ -24,6 +24,8 @@ public class Article implements Serializable {
 
     private Boolean isAdmiration;
 
+    private Byte status;
+
     private String creator;
 
     private Date createTime;
@@ -154,6 +156,14 @@ public class Article implements Serializable {
 
     public void setContribution(String contribution) {
         this.contribution = contribution == null ? null : contribution.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     @Override
