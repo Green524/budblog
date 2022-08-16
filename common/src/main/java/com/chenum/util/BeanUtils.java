@@ -10,8 +10,8 @@ import java.util.*;
 public class BeanUtils {
 
     /**
-     * 将相同field的属性copy到target,目前只对List进行处理（@Code JsonUtil.toJsonString(value)），
-     * 如果是别的类型不兼容，可能会出现copy失败
+     * ???field???copy?target,????List?????@Code JsonUtil.toJsonString(value)??
+     * ????????????????copy??
      * @param source
      * @param target
      * @param ignoreField
@@ -41,7 +41,7 @@ public class BeanUtils {
     }
 
     /**
-     * 实体属性转成Map
+     * ??????Map
      * @param entity
      * @return
      */

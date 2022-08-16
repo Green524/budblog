@@ -1,10 +1,10 @@
-FROM openjdk:17
+FROM openjdk:17-alpine
 MAINTAINER chenum
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 RUN mkdir -p /blogservice
 
-COPY ./target/blogservice-1.1.1.jar /blogservice/app.jar
+COPY ./target/blogservice-0.0.1.jar /blogservice/app.jar
 WORKDIR /blogservice
 
 EXPOSE 8842
