@@ -30,7 +30,6 @@ import static com.chenum.constant.VField.*;
 @Slf4j
 public class ArticleServiceImpl implements IArticleService {
 
-
     @Resource
     private ArticleMapper articleMapper;
 
@@ -45,7 +44,7 @@ public class ArticleServiceImpl implements IArticleService {
             throw new BusinessException(BaseEnum.INERT_ERROR);
         }
         Article record = articleMapper.selectByPrimaryKey(article.getId());
-        content(record);
+        record.setContent(MarkdownUtil.md2Html(article.getContent()));
         return WrapMapper.ok(record);
     }
 
@@ -54,7 +53,7 @@ public class ArticleServiceImpl implements IArticleService {
     public Wrapper<Boolean> del(ArticleVO articleVO) {
         int deletes = articleMapper.deleteByPrimaryKey(articleVO.getId());
         if (deletes == 0){
-            throw new BusinessException(BaseEnum.DELETE_ERROR);
+            WrapMapper.ok(Boolean.FALSE);
         }
         return WrapMapper.ok(Boolean.TRUE);
     }
@@ -64,7 +63,7 @@ public class ArticleServiceImpl implements IArticleService {
     public Wrapper<List<Article>> selectByPage(ArticleVO articleVO) {
         Map<String,Object> params = BeanUtils.entityToMap(articleVO);
         List<Article> list = articleMapper.selectByPage(params);
-        list.forEach(this::content);
+        list.forEach((article -> MarkdownUtil.md2Html(article.getContent())));
         return WrapMapper.ok(list);
     }
 
@@ -79,7 +78,7 @@ public class ArticleServiceImpl implements IArticleService {
         BeanUtils.copyProperties(articleVO,article,"id");
         article.setUpdateTime(new Date());
         article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
-        long updates = articleMapper.updateByPrimaryKeySelective(article);
+        articleMapper.updateByPrimaryKeySelective(article);
 
         return WrapMapper.ok(articleMapper.selectByPrimaryKey(id));
     }
@@ -90,12 +89,7 @@ public class ArticleServiceImpl implements IArticleService {
             throw new BusinessException(BaseEnum.PARAMS_ERROR).setData(id);
         }
         Article article = articleMapper.selectByPrimaryKey(id);
-        content(article);
-        return WrapMapper.ok(article);
-    }
-
-
-    private void content(Article article){
         article.setContent(MarkdownUtil.md2Html(article.getContent()));
+        return WrapMapper.ok(article);
     }
 }

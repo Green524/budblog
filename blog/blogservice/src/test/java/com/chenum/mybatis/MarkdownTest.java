@@ -1,15 +1,32 @@
 package com.chenum.mybatis;
 
+import com.chenum.dao.ArticleMapper;
+import com.chenum.po.Article;
+import com.chenum.util.JsonUtil;
+import com.chenum.vo.ArticleVO;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
+import javax.annotation.Resource;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
-import java.util.List;
-
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class MarkdownTest {
 
     String md = """
@@ -50,6 +67,9 @@ public class MarkdownTest {
                         
             """;
 
+    @Resource
+    ArticleMapper articleMapper;
+
     @Test
     public void test(){
         MutableDataSet options = new MutableDataSet();
@@ -62,7 +82,52 @@ public class MarkdownTest {
         Node document = parser.parse(md);
         String html = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
         System.out.println(html);
+    }
 
+//    @Test
+    public String test1(){
+        ArticleVO article = new ArticleVO();
+        article.setContent(md);
+        article.setTitle("ffff");
+        article.setIsLike(true);
+        article.setIsAdmiration(true);
+        article.setIsComment(true);
+        article.setAuthor(Lists.list(1,2));
+        article.setContentTag("1,2,");
+        article.setCreator("ccc");
+        article.setCreateTime(new Date());
+        article.setUpdateTime(article.getCreateTime());
+        return JsonUtil.toJsonString(article);
+    }
+
+    @Test
+    public void test2() throws IOException {
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        HttpPut put = new HttpPut("http://localhost:8842/blog/add");
+        put.addHeader("Content-Type", "application/json; charset=UTF-8");
+        String md = test1();
+        System.out.println(md);
+        HttpEntity entity = new StringEntity(md, StandardCharsets.UTF_8);
+        put.setEntity(entity);
+        CloseableHttpResponse response = client.execute(put, HttpClientContext.create());
+        System.out.println(EntityUtils.toString(response.getEntity()));
+    }
+
+    @Test
+    public void test3() throws IOException {
+        String lineSeparator=System.getProperty("line.separator");
+        String str = String.valueOf(lineSeparator.charAt(1));
+        System.out.println(str);
+        System.out.println(md.replace(str,""));
 
     }
+
+    public static void main(String[] args) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\admin\\Desktop\\tmp.txt");
+        byte[] b = new byte[1024];
+        int len = fileInputStream.read(b);
+        System.out.println(Arrays.toString(b));
+    }
+
+
 }

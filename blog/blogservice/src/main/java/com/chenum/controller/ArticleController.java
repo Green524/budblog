@@ -16,31 +16,31 @@ public class ArticleController {
     @Resource
     private IArticleService iArticleService;
 
-    @PutMapping("/add")
-    public Wrapper<Article> add(ArticleVO articleVO){
+    @PostMapping("/add")
+    public Wrapper<Article> add(@RequestBody ArticleVO articleVO){
+        System.out.println(articleVO);
         return iArticleService.add(articleVO);
+    }
+    @PutMapping("/update")
+    public Wrapper<Article> update(@RequestBody ArticleVO articleVO){
+        return iArticleService.updateOne(articleVO);
     }
 
     @DeleteMapping("/del")
-    public Wrapper<Boolean> del(ArticleVO articleVO){
+    public Wrapper<Boolean> del(@RequestBody ArticleVO articleVO){
+        System.out.println(articleVO);
         return iArticleService.del(articleVO);
     }
 
     @GetMapping("/query/page")
-    public Wrapper<List<Article>> selectByPage(ArticleVO articleVO){
+    public Wrapper<List<Article>> selectByPage(@RequestBody ArticleVO articleVO){
         return iArticleService.selectByPage(articleVO);
     }
 
-
-    @PutMapping("/update")
-    public Wrapper<Article> update(ArticleVO articleVO){
-        return iArticleService.updateOne(articleVO);
-    }
 
     @GetMapping("/query/{id}")
     public Wrapper<Article> query(@PathVariable String id){
         return iArticleService.query(id);
     }
-
 
 }
