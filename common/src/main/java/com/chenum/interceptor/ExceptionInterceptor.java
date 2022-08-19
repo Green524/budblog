@@ -19,6 +19,14 @@ public class ExceptionInterceptor {
     public Wrapper<?> businessException(BusinessException be){
         log.error("发生业务异常：{}",be.getMessage());
         be.printStackTrace();
-        return WrapMapper.error(be);
+        return WrapMapper.error(be.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public Wrapper<?> exception(Exception e){
+        log.error("内部错误:{}",e.getMessage());
+        e.printStackTrace();
+        return WrapMapper.error(e.getMessage());
     }
 }

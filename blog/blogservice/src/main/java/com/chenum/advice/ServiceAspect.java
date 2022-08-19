@@ -11,12 +11,12 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.jsoup.internal.StringUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -40,6 +40,9 @@ public class ServiceAspect {
             throw new BusinessException(BaseEnum.PARAMS_ERROR);
         }
         Class<?> argClass = arg.getClass();
+        if (argClass == String.class){
+            return;
+        }
         for (String parameter : parameters) {
             Field field = argClass.getDeclaredField(parameter);
             field.setAccessible(true);
@@ -51,9 +54,15 @@ public class ServiceAspect {
             if (value instanceof String valueOfStr) {
                 if (StringUtils.isEmpty(valueOfStr)) {
                     log.error("parameter {} is {}", parameter, VField.NULL);
-                    throw new BusinessException(BaseEnum.PARAMS_ERROR).setData(valueOfStr);
+                    throw new BusinessException(BaseEnum.PARAMS_ERROR.setData(valueOfStr));
                 }
-            } else {
+            }else if(value.getClass().isArray()){
+                if (Array.getLength(value) == 0){
+                    log.error("parameter {} is {}", parameter, VField.NULL);
+                    throw new BusinessException(BaseEnum.PARAMS_ERROR);
+                }
+            }
+            else {
                 if (Objects.isNull(value)) {
                     log.error("parameter {} is {}", parameter, VField.NULL);
                     throw new BusinessException(BaseEnum.PARAMS_ERROR);

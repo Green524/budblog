@@ -27,27 +27,12 @@ public class BusinessException extends RuntimeException{
     public int code() {
         return code;
     }
-
-    public BusinessException setCode(int code) {
-        this.code = code;
-        return this;
-    }
-
     public String message() {
         return message;
-    }
-
-    public BusinessException setMessage(String message) {
-        this.message = message;
-        return this;
     }
 
     public Object data() {
         return data;
     }
 
-    public BusinessException setData(Object data) {
-        this.data = data;
-        return this;
-    }
 }

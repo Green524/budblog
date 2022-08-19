@@ -1,184 +1,225 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chenum.dao.CommentMapper">
-  <resultMap id="BaseResultMap" type="com.chenum.po.Comment">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
-    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
-    <result column="commenter" jdbcType="VARCHAR" property="commenter" />
-    <result column="commenter_email" jdbcType="VARCHAR" property="commenterEmail" />
-    <result column="personalized_url" jdbcType="VARCHAR" property="personalizedUrl" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="last_reviewer" jdbcType="TIMESTAMP" property="lastReviewer" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.chenum.po.Comment">
-    <result column="comment" jdbcType="LONGVARBINARY" property="comment" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, parent_id, article_id, commenter, commenter_email, personalized_url, creator, 
+    <resultMap id="BaseResultMap" type="com.chenum.po.Comment">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+        <result column="status" jdbcType="BIT" property="status"/>
+        <result column="article_id" jdbcType="VARCHAR" property="articleId"/>
+        <result column="commenter" jdbcType="VARCHAR" property="commenter"/>
+        <result column="commenter_email" jdbcType="VARCHAR" property="commenterEmail"/>
+        <result column="personalized_url" jdbcType="VARCHAR" property="personalizedUrl"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="last_reviewer" jdbcType="VARCHAR" property="lastReviewer"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, comment,parent_id, status, article_id, commenter, commenter_email, personalized_url, creator,
     create_time, update_time, last_reviewer
-  </sql>
-  <sql id="Blob_Column_List">
-    comment
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from tb_comment
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_comment
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="com.chenum.po.Comment">
-    insert into tb_comment (id, parent_id, article_id, 
-      commenter, commenter_email, personalized_url, 
-      creator, create_time, update_time, 
-      last_reviewer, comment)
-    values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{articleId,jdbcType=VARCHAR}, 
-      #{commenter,jdbcType=VARCHAR}, #{commenterEmail,jdbcType=VARCHAR}, #{personalizedUrl,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{lastReviewer,jdbcType=TIMESTAMP}, #{comment,jdbcType=LONGVARBINARY})
-  </insert>
-  <insert id="insertSelective" parameterType="com.chenum.po.Comment">
-    insert into tb_comment
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="parentId != null">
-        parent_id,
-      </if>
-      <if test="articleId != null">
-        article_id,
-      </if>
-      <if test="commenter != null">
-        commenter,
-      </if>
-      <if test="commenterEmail != null">
-        commenter_email,
-      </if>
-      <if test="personalizedUrl != null">
-        personalized_url,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="lastReviewer != null">
-        last_reviewer,
-      </if>
-      <if test="comment != null">
-        comment,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="parentId != null">
-        #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="articleId != null">
-        #{articleId,jdbcType=VARCHAR},
-      </if>
-      <if test="commenter != null">
-        #{commenter,jdbcType=VARCHAR},
-      </if>
-      <if test="commenterEmail != null">
-        #{commenterEmail,jdbcType=VARCHAR},
-      </if>
-      <if test="personalizedUrl != null">
-        #{personalizedUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastReviewer != null">
-        #{lastReviewer,jdbcType=TIMESTAMP},
-      </if>
-      <if test="comment != null">
-        #{comment,jdbcType=LONGVARBINARY},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.chenum.po.Comment">
-    update tb_comment
-    <set>
-      <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="articleId != null">
-        article_id = #{articleId,jdbcType=VARCHAR},
-      </if>
-      <if test="commenter != null">
-        commenter = #{commenter,jdbcType=VARCHAR},
-      </if>
-      <if test="commenterEmail != null">
-        commenter_email = #{commenterEmail,jdbcType=VARCHAR},
-      </if>
-      <if test="personalizedUrl != null">
-        personalized_url = #{personalizedUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastReviewer != null">
-        last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP},
-      </if>
-      <if test="comment != null">
-        comment = #{comment,jdbcType=LONGVARBINARY},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chenum.po.Comment">
-    update tb_comment
-    set parent_id = #{parentId,jdbcType=VARCHAR},
-      article_id = #{articleId,jdbcType=VARCHAR},
-      commenter = #{commenter,jdbcType=VARCHAR},
-      commenter_email = #{commenterEmail,jdbcType=VARCHAR},
-      personalized_url = #{personalizedUrl,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP},
-      comment = #{comment,jdbcType=LONGVARBINARY}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.chenum.po.Comment">
-    update tb_comment
-    set parent_id = #{parentId,jdbcType=VARCHAR},
-      article_id = #{articleId,jdbcType=VARCHAR},
-      commenter = #{commenter,jdbcType=VARCHAR},
-      commenter_email = #{commenterEmail,jdbcType=VARCHAR},
-      personalized_url = #{personalizedUrl,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
+    </sql>
+    <sql id="Conditional_List">
+        where 1 = 1
+        <if test="comment != null and comment != ''">
+            and comment = #{comment,jdbcType=VARCHAR}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            and parent_id = #{parentId,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=BIT}
+        </if>
+        <if test="articleId != null and articleId != ''">
+            and article_id = #{articleId,jdbcType=VARCHAR}
+        </if>
+        <if test="commenter != null and commenter != ''">
+            and commenter = #{commenter,jdbcType=VARCHAR}
+        </if>
+        <if test="commenterEmail != null and commenterEmail != ''">
+            and commenter_email = #{commenter_email,jdbcType=VARCHAR}
+        </if>
+        <if test="personalizedUrl != null and personalizedUrl != ''">
+            and personalized_url = #{personalizedUrl,jdbcType=VARCHAR}
+        </if>
+        <if test="creator != null and creator != ''">
+            and creator = #{creator,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateTime != null">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="lastReviewer != null">
+            and last_reviewer = #{lastReviewer,jdbcType=VARCHAR}
+        </if>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_comment
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectSelective" parameterType="com.chenum.po.Comment" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_comment
+        <include refid="Conditional_List"/>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from tb_comment
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.chenum.po.Comment" useGeneratedKeys="true" keyProperty="id">
+        <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+            SELECT UUID_SHORT() FROM DUAL
+        </selectKey>
+        insert into tb_comment (id, parent_id, status,article_id,
+        commenter, commenter_email, personalized_url,
+        creator, create_time, update_time,
+        last_reviewer, comment)
+        values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR},
+        #{status,jdbcType=BIT},#{articleId,jdbcType=VARCHAR},
+        #{commenter,jdbcType=VARCHAR}, #{commenterEmail,jdbcType=VARCHAR}, #{personalizedUrl,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+        #{lastReviewer,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.chenum.po.Comment" useGeneratedKeys="true" keyProperty="id">
+        <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+            SELECT UUID_SHORT() FROM DUAL
+        </selectKey>
+        insert into tb_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="status != null">
+                status
+            </if>
+            <if test="articleId != null">
+                article_id,
+            </if>
+            <if test="commenter != null">
+                commenter,
+            </if>
+            <if test="commenterEmail != null">
+                commenter_email,
+            </if>
+            <if test="personalizedUrl != null">
+                personalized_url,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="lastReviewer != null">
+                last_reviewer,
+            </if>
+            <if test="comment != null">
+                comment,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="articleId != null">
+                #{articleId,jdbcType=VARCHAR},
+            </if>
+            <if test="commenter != null">
+                #{commenter,jdbcType=VARCHAR},
+            </if>
+            <if test="commenterEmail != null">
+                #{commenterEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="personalizedUrl != null">
+                #{personalizedUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastReviewer != null">
+                #{lastReviewer,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comment != null">
+                #{comment,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chenum.po.Comment">
+        update tb_comment
+        <set>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=BIT},
+            </if>
+            <if test="articleId != null">
+                article_id = #{articleId,jdbcType=VARCHAR},
+            </if>
+            <if test="commenter != null">
+                commenter = #{commenter,jdbcType=VARCHAR},
+            </if>
+            <if test="commenterEmail != null">
+                commenter_email = #{commenterEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="personalizedUrl != null">
+                personalized_url = #{personalizedUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastReviewer != null">
+                last_reviewer = #{lastReviewer,jdbcType=VARCHAR},
+            </if>
+            <if test="comment != null">
+                comment = #{comment,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWith" parameterType="com.chenum.po.Comment">
+        update tb_comment
+        set parent_id        = #{parentId,jdbcType=VARCHAR},
+            status           = #{status,jdbcType=BIT},
+            article_id       = #{articleId,jdbcType=VARCHAR},
+            commenter        = #{commenter,jdbcType=VARCHAR},
+            commenter_email  = #{commenterEmail,jdbcType=VARCHAR},
+            personalized_url = #{personalizedUrl,jdbcType=VARCHAR},
+            creator          = #{creator,jdbcType=VARCHAR},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            update_time      = #{updateTime,jdbcType=TIMESTAMP},
+            last_reviewer    = #{lastReviewer,jdbcType=VARCHAR},
+            comment          = #{comment,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
 </mapper>

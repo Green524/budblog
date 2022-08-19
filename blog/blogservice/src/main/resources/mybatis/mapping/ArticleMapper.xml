@@ -16,7 +16,7 @@
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="last_reviewer" jdbcType="OTHER" property="lastReviewer"/>
+        <result column="last_reviewer" jdbcType="VARCHAR" property="lastReviewer"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, title, content, markdown, author, content_tag, word_count, contribution,is_like, is_comment,
@@ -109,11 +109,14 @@
         #{wordCount,jdbcType=BIGINT}, #{isLike,jdbcType=BIT}, #{isComment,jdbcType=BIT},
         #{isAdmiration,jdbcType=BIT}, #{status,jdbcType=BIT},#{creator,jdbcType=VARCHAR},
         #{createTime,jdbcType=TIMESTAMP},
-        #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=TIMESTAMP}, #{contribution,jdbcType=OTHER}
+        #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=VARCHAR}, #{contribution,jdbcType=OTHER}
         )
 
     </insert>
     <insert id="insertSelective" parameterType="com.chenum.po.Article">
+        <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+            SELECT UUID_SHORT() FROM DUAL
+        </selectKey>
         insert into tb_article
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -259,7 +262,7 @@
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
             <if test="lastReviewer != null">
-                last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP},
+                last_reviewer = #{lastReviewer,jdbcType=VARCHAR},
             </if>
             <if test="contribution != null">
                 contribution = #{contribution,jdbcType=LONGVARCHAR},
@@ -282,7 +285,7 @@
             creator       = #{creator,jdbcType=VARCHAR},
             create_time   = #{createTime,jdbcType=TIMESTAMP},
             update_time   = #{updateTime,jdbcType=TIMESTAMP},
-            last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP}
+            last_reviewer = #{lastReviewer,jdbcType=VARCHAR}
         where id = #{id,jdbcType=VARCHAR}
     </update>
 </mapper>

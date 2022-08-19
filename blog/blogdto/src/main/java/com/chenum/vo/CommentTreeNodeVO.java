@@ -1,9 +1,10 @@
-package com.chenum.po;
+package com.chenum.vo;
 
-import java.io.Serializable;
+import com.chenum.po.TreeNode;
+
 import java.util.Date;
 
-public class Comment implements Serializable {
+public class CommentTreeNodeVO extends TreeNode {
     private String id;
 
     private String parentId;
@@ -28,14 +29,14 @@ public class Comment implements Serializable {
 
     private String comment;
 
-    private static final long serialVersionUID = 1L;
-
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getParentId() {
@@ -43,7 +44,15 @@ public class Comment implements Serializable {
     }
 
     public void setParentId(String parentId) {
-        this.parentId = parentId == null ? null : parentId.trim();
+        this.parentId = parentId;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public String getArticleId() {
@@ -51,7 +60,7 @@ public class Comment implements Serializable {
     }
 
     public void setArticleId(String articleId) {
-        this.articleId = articleId == null ? null : articleId.trim();
+        this.articleId = articleId;
     }
 
     public String getCommenter() {
@@ -59,7 +68,7 @@ public class Comment implements Serializable {
     }
 
     public void setCommenter(String commenter) {
-        this.commenter = commenter == null ? null : commenter.trim();
+        this.commenter = commenter;
     }
 
     public String getCommenterEmail() {
@@ -67,7 +76,7 @@ public class Comment implements Serializable {
     }
 
     public void setCommenterEmail(String commenterEmail) {
-        this.commenterEmail = commenterEmail == null ? null : commenterEmail.trim();
+        this.commenterEmail = commenterEmail;
     }
 
     public String getPersonalizedUrl() {
@@ -75,7 +84,7 @@ public class Comment implements Serializable {
     }
 
     public void setPersonalizedUrl(String personalizedUrl) {
-        this.personalizedUrl = personalizedUrl == null ? null : personalizedUrl.trim();
+        this.personalizedUrl = personalizedUrl;
     }
 
     public String getCreator() {
@@ -83,7 +92,7 @@ public class Comment implements Serializable {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
 
     public Date getCreateTime() {
@@ -118,11 +127,22 @@ public class Comment implements Serializable {
         this.comment = comment;
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("CommentTreeNodeVO{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", parentId='").append(parentId).append('\'');
+        sb.append(", status=").append(status);
+        sb.append(", articleId='").append(articleId).append('\'');
+        sb.append(", commenter='").append(commenter).append('\'');
+        sb.append(", commenterEmail='").append(commenterEmail).append('\'');
+        sb.append(", personalizedUrl='").append(personalizedUrl).append('\'');
+        sb.append(", creator='").append(creator).append('\'');
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", lastReviewer='").append(lastReviewer).append('\'');
+        sb.append(", comment='").append(comment).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

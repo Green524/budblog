@@ -2,6 +2,7 @@ package com.chenum.util;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -9,13 +10,6 @@ import java.util.*;
 @Slf4j
 public class BeanUtils {
 
-    /**
-     * ???field???copy?target,????List?????@Code JsonUtil.toJsonString(value)??
-     * ????????????????copy??
-     * @param source
-     * @param target
-     * @param ignoreField
-     */
     public static void copyProperties(Object source, Object target, String... ignoreField) {
         assert source != null && target != null;
         Map<String, Object> map = entityToMap(source);
@@ -40,11 +34,21 @@ public class BeanUtils {
         }
     }
 
-    /**
-     * ??????Map
-     * @param entity
-     * @return
-     */
+    public static List<Object> copyListProperties(List<?> source, Class<?> targetClass){
+        List<Object> result = new ArrayList<>(source.size());;
+        try {
+            for (Object o : source) {
+                Constructor<?> constructor = targetClass.getConstructor();
+                Object obj = constructor.newInstance();
+                BeanUtils.copyProperties(o,obj);
+                result.add(obj);
+            }
+        }catch (Exception e){
+            log.error("复制属性失败,{}",e.getMessage());
+        }
+        return result;
+    }
+
     public static Map<String, Object> entityToMap(Object entity) {
         Class<?> entityClass = entity.getClass();
         Method[] methods = entityClass.getMethods();
@@ -54,6 +58,9 @@ public class BeanUtils {
             if (methodName.startsWith("get")) {
                 try {
                     Object value = method.invoke(entity);
+                    if (Objects.isNull(value)){
+                        continue;
+                    }
                     map.put(FieldUtils.field(methodName), value);
                 } catch (Exception e) {
                     e.printStackTrace();

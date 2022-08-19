@@ -4,6 +4,7 @@ import com.chenum.po.Article;
 import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
 import com.chenum.vo.ArticleVO;
+import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -33,7 +34,7 @@ public class ArticleController {
     }
 
     @GetMapping("/query/page")
-    public Wrapper<List<Article>> selectByPage(@RequestBody ArticleVO articleVO){
+    public Wrapper<PageInfo<Article>> selectByPage(@RequestBody ArticleVO articleVO){
         return iArticleService.selectByPage(articleVO);
     }
 

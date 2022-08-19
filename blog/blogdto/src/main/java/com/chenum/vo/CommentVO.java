@@ -1,14 +1,14 @@
-package com.chenum.po;
+package com.chenum.vo;
 
-import java.io.Serializable;
+import com.chenum.entity.BaseVO;
+
 import java.util.Date;
 
-public class Comment implements Serializable {
+public class CommentVO extends BaseVO {
+
     private String id;
 
     private String parentId;
-
-    private Byte status;
 
     private String articleId;
 
@@ -20,15 +20,13 @@ public class Comment implements Serializable {
 
     private String creator;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    private String lastReviewer;
+    private Date lastReviewer;
 
     private String comment;
 
-    private static final long serialVersionUID = 1L;
+    private Date createTime;
+
+    private Date updateTime;
 
     public String getId() {
         return id;
@@ -86,6 +84,23 @@ public class Comment implements Serializable {
         this.creator = creator == null ? null : creator.trim();
     }
 
+    public Date getLastReviewer() {
+        return lastReviewer;
+    }
+
+    public void setLastReviewer(Date lastReviewer) {
+        this.lastReviewer = lastReviewer;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -102,27 +117,21 @@ public class Comment implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getLastReviewer() {
-        return lastReviewer;
-    }
-
-    public void setLastReviewer(String lastReviewer) {
-        this.lastReviewer = lastReviewer;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("CommentVO{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", parentId='").append(parentId).append('\'');
+        sb.append(", articleId='").append(articleId).append('\'');
+        sb.append(", commenter='").append(commenter).append('\'');
+        sb.append(", commenterEmail='").append(commenterEmail).append('\'');
+        sb.append(", personalizedUrl='").append(personalizedUrl).append('\'');
+        sb.append(", creator='").append(creator).append('\'');
+        sb.append(", lastReviewer=").append(lastReviewer);
+        sb.append(", comment='").append(comment).append('\'');
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -13,6 +13,7 @@ import com.chenum.util.BeanUtils;
 import com.chenum.util.JsonUtil;
 import com.chenum.util.MarkdownUtil;
 import com.chenum.vo.ArticleVO;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -60,11 +61,11 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     @Page
-    public Wrapper<List<Article>> selectByPage(ArticleVO articleVO) {
+    public Wrapper<PageInfo<Article>> selectByPage(ArticleVO articleVO) {
         Map<String,Object> params = BeanUtils.entityToMap(articleVO);
         List<Article> list = articleMapper.selectByPage(params);
-        list.forEach((article -> MarkdownUtil.md2Html(article.getContent())));
-        return WrapMapper.ok(list);
+        list.forEach((article -> article.setContent(MarkdownUtil.md2Html(article.getContent()))));
+        return WrapMapper.ok(PageInfo.of(list));
     }
 
     @Override
@@ -86,7 +87,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     public Wrapper<Article> query(String id) {
         if (StringUtils.isEmpty(id)){
-            throw new BusinessException(BaseEnum.PARAMS_ERROR).setData(id);
+            throw new BusinessException(BaseEnum.PARAMS_ERROR.setData(id));
         }
         Article article = articleMapper.selectByPrimaryKey(id);
         article.setContent(MarkdownUtil.md2Html(article.getContent()));
