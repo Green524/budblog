@@ -1,6 +1,5 @@
 package com.chenum.service.impl;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
 import com.chenum.advice.Page;
 import com.chenum.advice.ParameterCheckAdvice;
 import com.chenum.dao.ArticleMapper;
@@ -13,23 +12,18 @@ import com.chenum.po.TreeNode;
 import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.ICommentService;
-import com.chenum.util.BeanUtils;
+import com.chenum.tree.Node;
+import com.chenum.tree.TreeBuilder;
 import com.chenum.util.TreeNodeUtil;
-import com.chenum.vo.ArticleVO;
 import com.chenum.vo.CommentTreeNodeVO;
 import com.chenum.vo.CommentVO;
 import com.github.pagehelper.PageInfo;
-import com.sun.source.doctree.CommentTree;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CommentServiceImpl implements ICommentService {
@@ -50,7 +44,7 @@ public class CommentServiceImpl implements ICommentService {
             }
         }
         String parentId = commentVO.getParentId();
-        if (StringUtils.isNotEmpty(parentId)) {
+        if (StringUtils.isNotEmpty(parentId) && !StringUtils.equals(parentId,"0")) {
             Comment parentComment = commentMapper.selectByPrimaryKey(parentId);
             if (Objects.isNull(parentComment)) {
                 throw new BusinessException(BaseEnum.INERT_ERROR.setData(parentId));
@@ -76,18 +70,17 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Page
     @ParameterCheckAdvice(parameters = "articleId")
-    public Wrapper<PageInfo<Comment>> selectByArticleId(CommentVO commentVO) {
+    public Wrapper<PageInfo<Node>> selectByArticleId(CommentVO commentVO) {
         Comment comment = new Comment();
         comment.setArticleId(commentVO.getArticleId());
-        List<Comment> record = commentMapper.selectSelective(comment);
-        List<Object> commentTreeNodeVOS = BeanUtils.copyListProperties(record,CommentTreeNodeVO.class);
-
-        List<List<TreeNode>> treeNodeList = new ArrayList<>();
-        for (Object commentTreeNodeVO : commentTreeNodeVOS) {
-            CommentTreeNodeVO vo = (CommentTreeNodeVO) commentTreeNodeVO;
-            treeNodeList.add(TreeNodeUtil.build(commentTreeNodeVOS,vo.getId()));
+        List<Comment> records = commentMapper.selectSelective(comment);
+        List<Node> commentTreeNodeVOS = new ArrayList<>();
+        for (Comment record : records) {
+            CommentTreeNodeVO node = new CommentTreeNodeVO();
+            BeanUtils.copyProperties(record,node);
+            commentTreeNodeVOS.add(node);
         }
-        System.out.println(treeNodeList);
-        return WrapMapper.ok(PageInfo.of(record));
+        List<Node> list = new TreeBuilder().buildTreeList(commentTreeNodeVOS);
+        return WrapMapper.ok(PageInfo.of(list));
     }
 }
