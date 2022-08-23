@@ -8,16 +8,15 @@ import com.chenum.enums.BaseEnum;
 import com.chenum.exception.BusinessException;
 import com.chenum.po.Article;
 import com.chenum.po.Comment;
-import com.chenum.po.TreeNode;
 import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.ICommentService;
 import com.chenum.tree.Node;
 import com.chenum.tree.TreeBuilder;
-import com.chenum.util.TreeNodeUtil;
-import com.chenum.vo.CommentTreeNodeVO;
+import com.chenum.vo.CommentTreeNode;
 import com.chenum.vo.CommentVO;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Service
+@Slf4j
 public class CommentServiceImpl implements ICommentService {
 
     @Resource
@@ -53,7 +53,7 @@ public class CommentServiceImpl implements ICommentService {
 
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentVO, comment);
-        long inserts = commentMapper.insertSelective(comment);
+        commentMapper.insertSelective(comment);
         return WrapMapper.ok(commentMapper.selectByPrimaryKey(comment.getId()));
     }
 
@@ -76,11 +76,25 @@ public class CommentServiceImpl implements ICommentService {
         List<Comment> records = commentMapper.selectSelective(comment);
         List<Node> commentTreeNodeVOS = new ArrayList<>();
         for (Comment record : records) {
-            CommentTreeNodeVO node = new CommentTreeNodeVO();
+            CommentTreeNode node = new CommentTreeNode();
             BeanUtils.copyProperties(record,node);
             commentTreeNodeVOS.add(node);
         }
         List<Node> list = new TreeBuilder().buildTreeList(commentTreeNodeVOS);
         return WrapMapper.ok(PageInfo.of(list));
+    }
+
+    @Override
+    @ParameterCheckAdvice(parameters = "id")
+    public Wrapper<Comment> update(CommentVO commentVO) {
+        Comment comment = commentMapper.selectByPrimaryKey(commentVO.getId());
+        if (Objects.isNull(comment)){
+            log.error("修改评论失败，没有查询到评论");
+            throw new BusinessException(BaseEnum.UPDATE_ERROR);
+        }
+        BeanUtils.copyProperties(commentVO,comment);
+        comment.setUpdateTime(new Date());
+        commentMapper.updateByPrimaryKeySelective(comment);
+        return WrapMapper.ok(commentMapper.selectByPrimaryKey(commentVO.getId()));
     }
 }

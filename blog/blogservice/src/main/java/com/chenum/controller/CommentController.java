@@ -5,7 +5,6 @@ import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.ICommentService;
 import com.chenum.tree.Node;
-import com.chenum.vo.CommentTreeNodeVO;
 import com.chenum.vo.CommentVO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +31,10 @@ public class CommentController {
     @GetMapping("/get/byarticleid")
     public Wrapper<PageInfo<Node>> selectByArticleId(@RequestBody CommentVO commentVO){
         return iCommentService.selectByArticleId(commentVO);
+    }
+
+    @PutMapping("/modify")
+    public Wrapper<Comment> modify(@RequestBody CommentVO commentVO){
+        return iCommentService.update(commentVO);
     }
 }

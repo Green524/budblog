@@ -10,7 +10,9 @@ public enum BaseEnum {
 
     DELETE_ERROR(6002,"Delete异常"),
 
-    SELECT_ERROR(6003,"Select异常")
+    SELECT_ERROR(6003,"Select异常"),
+
+    UPDATE_ERROR(6004,"Update异常"),
     ;
 
     private int code;

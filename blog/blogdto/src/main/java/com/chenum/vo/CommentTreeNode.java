@@ -1,16 +1,14 @@
 package com.chenum.vo;
 
 import com.chenum.po.Comment;
-import com.chenum.po.TreeNode;
 import com.chenum.tree.Node;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class CommentTreeNodeVO extends Comment implements Node<CommentTreeNodeVO> {
+public class CommentTreeNode extends Comment implements Node<CommentTreeNode> {
 
-    private List<CommentTreeNodeVO> children = new ArrayList<>();
+    private List<CommentTreeNode> children = new ArrayList<>();
 
     @Override
     public String getPid() {

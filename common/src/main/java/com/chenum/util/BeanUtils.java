@@ -2,6 +2,10 @@ package com.chenum.util;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,58 +21,60 @@ public class BeanUtils {
         List<String> ignoreFields = Arrays.stream(ignoreField).toList();
         for (String s : map.keySet()) {
             try {
-                if (ignoreFields.contains(s) ){
+                if (ignoreFields.contains(s) || s.equals("class")){
                     continue;
                 }
                 Object value = map.get(s);
                 Method getMethod = targetSource.getMethod(FieldUtils.getter(s));
                 Class<?> FieldType = getMethod.getReturnType();
-                Method method = targetSource.getDeclaredMethod(FieldUtils.setter(s), FieldType);
+                Method method = targetSource.getMethod(FieldUtils.setter(s), FieldType);
                 if (value instanceof List<?>) {
                     value = JsonUtil.toJsonString(value);
                 }
                 method.invoke(target, value);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException nsme) {
-
+                nsme.printStackTrace();
             }
         }
     }
 
-    public static List<Object> copyListProperties(List<?> source, Class<?> targetClass){
-        List<Object> result = new ArrayList<>(source.size());;
+
+    public static Map<String, Object> entityToMap(Object entity,boolean supper) {
         try {
-            for (Object o : source) {
-                Constructor<?> constructor = targetClass.getConstructor();
-                Object obj = constructor.newInstance();
-                BeanUtils.copyProperties(o,obj);
-                result.add(obj);
+            PropertyDescriptor[] propertyDescriptor = getPropertyDescriptors(entity,supper);
+            Map<String,Object> map = new HashMap<>();
+            for (PropertyDescriptor descriptor : propertyDescriptor) {
+                Method method = descriptor.getReadMethod();
+                Object value = method.invoke(entity);
+                map.put(descriptor.getName(),value);
             }
-        }catch (Exception e){
-            log.error("复制属性失败,{}",e.getMessage());
+            return map;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return result;
     }
 
+    /**
+     * 获取实体以及父类的属性
+     * @param entity
+     * @return
+     */
     public static Map<String, Object> entityToMap(Object entity) {
-        Class<?> entityClass = entity.getClass();
-        Method[] methods = entityClass.getMethods();
-        Map<String, Object> map = new HashMap<>();
-        for (Method method : methods) {
-            String methodName = method.getName();
-            if (methodName.startsWith("get")) {
-                try {
-                    Object value = method.invoke(entity);
-                    if (Objects.isNull(value)){
-                        continue;
-                    }
-                    map.put(FieldUtils.field(methodName), value);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            }
+        return entityToMap(entity,true);
+    }
 
+    private static PropertyDescriptor[] getPropertyDescriptors(Object obj,boolean supper){
+        try {
+            BeanInfo beanInfo;
+            Class<?> clazz = obj.getClass();
+            if (!supper){
+                beanInfo = Introspector.getBeanInfo(clazz,clazz.getSuperclass());
+            }else{
+                beanInfo = Introspector.getBeanInfo(clazz);
+            }
+            return beanInfo.getPropertyDescriptors();
+        }catch (IntrospectionException ie){
+            throw new RuntimeException(ie);
         }
-        return map;
     }
 }

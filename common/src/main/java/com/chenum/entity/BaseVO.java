@@ -2,7 +2,7 @@ package com.chenum.entity;
 
 import java.util.Date;
 
-public class BaseVO {
+public class BaseVO{
 
     private int pageNum = 1;
 

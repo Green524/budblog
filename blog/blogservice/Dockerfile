@@ -4,7 +4,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 RUN mkdir -p /blogservice
 
-COPY ./target/blogservice-0.0.1.jar /blogservice/app.jar
+COPY ./target/blogservice-0.0.2.jar /blogservice/app.jar
 WORKDIR /blogservice
 
 EXPOSE 13000
