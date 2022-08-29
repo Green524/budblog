@@ -39,7 +39,7 @@ public class ArticleController {
     }
 
     @GetMapping("/query/page")
-    public Wrapper<PageInfo<Article>> selectByPage(@RequestBody ArticleVO articleVO){
+    public Wrapper<PageInfo<Article>> selectByPage(ArticleVO articleVO){
         return iArticleService.selectByPage(articleVO);
     }
 
