@@ -32,7 +32,35 @@ public class BeanUtils {
                     value = JsonUtil.toJsonString(value);
                 }
                 method.invoke(target, value);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException nsme) {
+            } catch (IllegalArgumentException iae){
+
+            }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException nsme) {
+                nsme.printStackTrace();
+            }
+        }
+    }
+
+    public static void copyProperties(Object source, Object target, boolean supper,String... ignoreField) {
+        assert source != null && target != null;
+        Map<String, Object> map = entityToMap(source,supper);
+        Class<?> targetSource = target.getClass();
+        List<String> ignoreFields = Arrays.stream(ignoreField).toList();
+        for (String s : map.keySet()) {
+            try {
+                if (ignoreFields.contains(s) || s.equals("class")){
+                    continue;
+                }
+                Object value = map.get(s);
+                Method getMethod = targetSource.getMethod(FieldUtils.getter(s));
+                Class<?> FieldType = getMethod.getReturnType();
+                Method method = targetSource.getMethod(FieldUtils.setter(s), FieldType);
+                if (value instanceof List<?>) {
+                    value = JsonUtil.toJsonString(value);
+                }
+                method.invoke(target, value);
+            }catch (IllegalArgumentException iae){
+
+            }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException nsme) {
                 nsme.printStackTrace();
             }
         }

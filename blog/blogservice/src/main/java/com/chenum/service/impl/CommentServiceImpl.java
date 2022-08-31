@@ -13,16 +13,22 @@ import com.chenum.response.Wrapper;
 import com.chenum.service.ICommentService;
 import com.chenum.tree.Node;
 import com.chenum.tree.TreeBuilder;
+import com.chenum.vo.CommentResponseVO;
 import com.chenum.vo.CommentTreeNode;
 import com.chenum.vo.CommentVO;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -39,9 +45,9 @@ public class CommentServiceImpl implements ICommentService {
         String articleId = commentVO.getArticleId();
         if (StringUtils.isNotEmpty(articleId)) {
             Article article = articleMapper.selectByPrimaryKey(articleId);
-            if (Objects.isNull(article)) {
-                throw new BusinessException(BaseEnum.INERT_ERROR.setData(articleId));
-            }
+//            if (Objects.isNull(article)) {
+//                throw new BusinessException(BaseEnum.INERT_ERROR.setData(articleId));
+//            }
         }
         String parentId = commentVO.getParentId();
         if (StringUtils.isNotEmpty(parentId) && !StringUtils.equals(parentId,"0")) {
@@ -82,6 +88,51 @@ public class CommentServiceImpl implements ICommentService {
         }
         List<Node> list = new TreeBuilder().buildTreeList(commentTreeNodeVOS);
         return WrapMapper.ok(PageInfo.of(list));
+    }
+
+    @Override
+    @Page
+    @ParameterCheckAdvice(parameters = "articleId")
+    public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO) {
+        Comment comment = new Comment();
+        comment.setArticleId(commentVO.getArticleId());
+        comment.setParentId("0");
+        List<Comment> parentRecords = commentMapper.selectSelective(comment);
+        List<CommentResponseVO> commentResponseVOS = new ArrayList<>();
+        for (Comment parentRecord : parentRecords) {
+            subCommentResponseVOS.clear();
+            CommentResponseVO commentResponseVO = new CommentResponseVO();
+            commentResponseVO.setId(parentRecord.getId());
+            commentResponseVO.setCommentUser(new CommentResponseVO.User(parentRecord.getId(), parentRecord.getCommenter(), ""));
+            commentResponseVO.setContent(parentRecord.getComment());
+            commentResponseVO.setCreateDate(parentRecord.getCreateTime());
+
+            commentResponseVO.setChildrenList(sub(parentRecord));
+            commentResponseVOS.add(commentResponseVO);
+        }
+
+        return WrapMapper.ok(PageInfo.of(commentResponseVOS));
+    }
+
+    List<CommentResponseVO> subCommentResponseVOS = new ArrayList<>();
+    private List<CommentResponseVO> sub(Comment parentRecord){
+        Comment comment = new Comment();
+        comment.setArticleId(parentRecord.getArticleId());
+        comment.setParentId(parentRecord.getId());
+
+        List<Comment> subCommentList = commentMapper.selectSelective(comment);
+        for (Comment subComment : subCommentList) {
+            CommentResponseVO subCommentResponseVO = new CommentResponseVO();
+            subCommentResponseVO.setId(subComment.getId());
+            subCommentResponseVO.setCommentUser(new CommentResponseVO.User(subComment.getId(), subComment.getCommenter(), ""));
+            subCommentResponseVO.setContent(subComment.getComment());
+            subCommentResponseVO.setCreateDate(subComment.getCreateTime());
+            subCommentResponseVO.setTargetUser(new CommentResponseVO.User(parentRecord.getId(),parentRecord.getCommenter(),""));
+
+            sub(subComment);
+            subCommentResponseVOS.add(subCommentResponseVO);
+        }
+        return subCommentResponseVOS;
     }
 
     @Override

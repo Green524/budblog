@@ -3,6 +3,7 @@ package com.chenum.service;
 import com.chenum.po.Comment;
 import com.chenum.response.Wrapper;
 import com.chenum.tree.Node;
+import com.chenum.vo.CommentResponseVO;
 import com.chenum.vo.CommentVO;
 import com.github.pagehelper.PageInfo;
 
@@ -13,6 +14,8 @@ public interface ICommentService {
     Wrapper<Boolean> delete(String id);
 
     Wrapper<PageInfo<Node>> selectByArticleId(CommentVO commentVO);
+
+    Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO);
 
     Wrapper<Comment> update(CommentVO commentVO);
 }

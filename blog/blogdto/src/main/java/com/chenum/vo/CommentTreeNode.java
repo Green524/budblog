@@ -8,6 +8,7 @@ import java.util.List;
 
 public class CommentTreeNode extends Comment implements Node<CommentTreeNode> {
 
+
     private List<CommentTreeNode> children = new ArrayList<>();
 
     @Override
@@ -24,4 +25,6 @@ public class CommentTreeNode extends Comment implements Node<CommentTreeNode> {
     public void setChildren(List children) {
         this.children = children;
     }
+
+
 }

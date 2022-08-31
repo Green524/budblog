@@ -93,7 +93,7 @@ public class MarkdownTest {
         article.setIsAdmiration(true);
         article.setIsComment(true);
         article.setAuthor(Lists.list(1,2));
-        article.setContentTag("1,2,");
+        article.setContentTag("1,2");
         article.setCreator("ccc");
         article.setCreateTime(new Date());
         article.setUpdateTime(article.getCreateTime());

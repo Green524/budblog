@@ -4,6 +4,7 @@ import com.chenum.po.Article;
 import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
+import com.chenum.vo.ArticleResponseVO;
 import com.chenum.vo.ArticleVO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +24,12 @@ public class ArticleController {
     private IArticleService iArticleService;
 
     @PostMapping("/add")
-    public Wrapper<Article> add(@RequestBody ArticleVO articleVO){
+    public Wrapper<ArticleResponseVO> add(@RequestBody ArticleVO articleVO){
         System.out.println(articleVO);
         return iArticleService.add(articleVO);
     }
     @PutMapping("/update")
-    public Wrapper<Article> update(@RequestBody ArticleVO articleVO){
+    public Wrapper<ArticleResponseVO> update(@RequestBody ArticleVO articleVO){
         return iArticleService.updateOne(articleVO);
     }
 
@@ -39,13 +40,13 @@ public class ArticleController {
     }
 
     @GetMapping("/query/page")
-    public Wrapper<PageInfo<Article>> selectByPage(ArticleVO articleVO){
+    public Wrapper<PageInfo<ArticleResponseVO>> selectByPage(ArticleVO articleVO){
         return iArticleService.selectByPage(articleVO);
     }
 
 
     @GetMapping("/query/{id}")
-    public Wrapper<Article> query(@PathVariable String id){
+    public Wrapper<ArticleResponseVO> query(@PathVariable String id){
         return iArticleService.query(id);
     }
 
