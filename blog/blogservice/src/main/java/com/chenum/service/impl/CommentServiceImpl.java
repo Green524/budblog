@@ -19,16 +19,11 @@ import com.chenum.vo.CommentVO;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -45,9 +40,9 @@ public class CommentServiceImpl implements ICommentService {
         String articleId = commentVO.getArticleId();
         if (StringUtils.isNotEmpty(articleId)) {
             Article article = articleMapper.selectByPrimaryKey(articleId);
-//            if (Objects.isNull(article)) {
-//                throw new BusinessException(BaseEnum.INERT_ERROR.setData(articleId));
-//            }
+            if (Objects.isNull(article)) {
+                throw new BusinessException(BaseEnum.INERT_ERROR.setData(articleId));
+            }
         }
         String parentId = commentVO.getParentId();
         if (StringUtils.isNotEmpty(parentId) && !StringUtils.equals(parentId,"0")) {
@@ -80,7 +75,7 @@ public class CommentServiceImpl implements ICommentService {
         Comment comment = new Comment();
         comment.setArticleId(commentVO.getArticleId());
         List<Comment> records = commentMapper.selectSelective(comment);
-        List<Node> commentTreeNodeVOS = new ArrayList<>();
+        List<CommentTreeNode> commentTreeNodeVOS = new ArrayList<>();
         for (Comment record : records) {
             CommentTreeNode node = new CommentTreeNode();
             BeanUtils.copyProperties(record,node);
@@ -90,50 +85,46 @@ public class CommentServiceImpl implements ICommentService {
         return WrapMapper.ok(PageInfo.of(list));
     }
 
+
     @Override
     @Page
     @ParameterCheckAdvice(parameters = "articleId")
     public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO) {
-        Comment comment = new Comment();
-        comment.setArticleId(commentVO.getArticleId());
-        comment.setParentId("0");
-        List<Comment> parentRecords = commentMapper.selectSelective(comment);
-        List<CommentResponseVO> commentResponseVOS = new ArrayList<>();
-        for (Comment parentRecord : parentRecords) {
-            subCommentResponseVOS.clear();
-            CommentResponseVO commentResponseVO = new CommentResponseVO();
-            commentResponseVO.setId(parentRecord.getId());
-            commentResponseVO.setCommentUser(new CommentResponseVO.User(parentRecord.getId(), parentRecord.getCommenter(), ""));
-            commentResponseVO.setContent(parentRecord.getComment());
-            commentResponseVO.setCreateDate(parentRecord.getCreateTime());
-
-            commentResponseVO.setChildrenList(sub(parentRecord));
-            commentResponseVOS.add(commentResponseVO);
+        Wrapper<PageInfo<Node>> wrapper = selectByArticleId(commentVO);
+        List<Node> list = wrapper.data().getList();
+        List<CommentResponseVO> responseVOS = new ArrayList<>();
+        for (Node node : list) {
+            CommentResponseVO vo = responseCover(node,null);
+            List<CommentResponseVO> subResponseVOS = subNode(node.getChildren(),node,new ArrayList<>());
+            vo.setChildrenList(subResponseVOS);
+            responseVOS.add(vo);
         }
-
-        return WrapMapper.ok(PageInfo.of(commentResponseVOS));
+        return WrapMapper.ok(PageInfo.of(responseVOS));
     }
 
-    List<CommentResponseVO> subCommentResponseVOS = new ArrayList<>();
-    private List<CommentResponseVO> sub(Comment parentRecord){
-        Comment comment = new Comment();
-        comment.setArticleId(parentRecord.getArticleId());
-        comment.setParentId(parentRecord.getId());
 
-        List<Comment> subCommentList = commentMapper.selectSelective(comment);
-        for (Comment subComment : subCommentList) {
-            CommentResponseVO subCommentResponseVO = new CommentResponseVO();
-            subCommentResponseVO.setId(subComment.getId());
-            subCommentResponseVO.setCommentUser(new CommentResponseVO.User(subComment.getId(), subComment.getCommenter(), ""));
-            subCommentResponseVO.setContent(subComment.getComment());
-            subCommentResponseVO.setCreateDate(subComment.getCreateTime());
-            subCommentResponseVO.setTargetUser(new CommentResponseVO.User(parentRecord.getId(),parentRecord.getCommenter(),""));
-
-            sub(subComment);
-            subCommentResponseVOS.add(subCommentResponseVO);
+    private List<CommentResponseVO> subNode(List<CommentTreeNode> nodes,Node<CommentTreeNode> parent,List<CommentResponseVO> subResponseVOS){
+        for (CommentTreeNode node : nodes) {
+            subResponseVOS.add(responseCover(node,parent));
+            subNode(node.getChildren(),node,subResponseVOS);
         }
-        return subCommentResponseVOS;
+        return subResponseVOS;
     }
+
+    private CommentResponseVO responseCover(Node<?> node,Node<?> parent){
+        CommentTreeNode parentNode = (CommentTreeNode) parent;
+        CommentTreeNode tNode = (CommentTreeNode) node;
+        CommentResponseVO vo = new CommentResponseVO();
+        vo.setId(tNode.getId());
+        vo.setContent(tNode.getComment());
+        vo.setCreateDate(tNode.getCreateTime());
+        vo.setCommentUser(new CommentResponseVO.User(tNode.getId(),tNode.getCommenter(),""));
+        if (Objects.nonNull(parent)){
+            vo.setTargetUser(new CommentResponseVO.User(parent.getId(),parentNode.getCommenter(),""));
+        }
+        return vo;
+    }
+
 
     @Override
     @ParameterCheckAdvice(parameters = "id")

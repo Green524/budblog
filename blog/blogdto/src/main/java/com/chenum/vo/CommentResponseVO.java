@@ -65,4 +65,18 @@ public class CommentResponseVO {
     public void setChildrenList(List<CommentResponseVO> childrenList) {
         this.childrenList = childrenList;
     }
+
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("CommentResponseVO{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", commentUser=").append(commentUser);
+        sb.append(", targetUser=").append(targetUser);
+        sb.append(", content='").append(content).append('\'');
+        sb.append(", createDate=").append(createDate);
+        sb.append(", childrenList=").append(childrenList);
+        sb.append('}');
+        return sb.toString();
+    }
 }
