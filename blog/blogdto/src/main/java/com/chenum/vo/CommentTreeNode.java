@@ -12,8 +12,13 @@ public class CommentTreeNode extends Comment implements Node<CommentTreeNode> {
     private List<CommentTreeNode> children = new ArrayList<>();
 
     @Override
-    public String getPid() {
-        return getParentId();
+    public String id() {
+        return String.valueOf(getId());
+    }
+
+    @Override
+    public String pid() {
+        return String.valueOf(getParentId());
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.chenum.service.impl;
 
 import com.chenum.advice.Page;
 import com.chenum.advice.ParameterCheckAdvice;
+import com.chenum.config.properties.ConfigProperties;
 import com.chenum.dao.ArticleMapper;
 import com.chenum.dao.CommentMapper;
 import com.chenum.enums.BaseEnum;
@@ -33,9 +34,11 @@ public class CommentServiceImpl implements ICommentService {
     private CommentMapper commentMapper;
     @Resource
     private ArticleMapper articleMapper;
+    @Resource
+    private ConfigProperties configProperties;
 
     @Override
-    @ParameterCheckAdvice(parameters = {"comment", "createTime", "updateTime"})
+    @ParameterCheckAdvice(parameters = {"comment", "createTime", "updateTime","commenter"})
     public Wrapper<Comment> insert(CommentVO commentVO) {
         String articleId = commentVO.getArticleId();
         if (StringUtils.isNotEmpty(articleId)) {
@@ -44,8 +47,8 @@ public class CommentServiceImpl implements ICommentService {
                 throw new BusinessException(BaseEnum.INERT_ERROR.setData(articleId));
             }
         }
-        String parentId = commentVO.getParentId();
-        if (StringUtils.isNotEmpty(parentId) && !StringUtils.equals(parentId,"0")) {
+        Integer parentId = commentVO.getParentId();
+        if (Objects.nonNull(parentId) && parentId != 0) {
             Comment parentComment = commentMapper.selectByPrimaryKey(parentId);
             if (Objects.isNull(parentComment)) {
                 throw new BusinessException(BaseEnum.INERT_ERROR.setData(parentId));
@@ -54,8 +57,9 @@ public class CommentServiceImpl implements ICommentService {
 
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentVO, comment);
+        comment.setAvatarUrl(configProperties.getAvatarUrl().replace("{username}",comment.getCommenter()));
         commentMapper.insertSelective(comment);
-        return WrapMapper.ok(commentMapper.selectByPrimaryKey(comment.getId()));
+        return WrapMapper.ok();
     }
 
     @Override
@@ -87,7 +91,7 @@ public class CommentServiceImpl implements ICommentService {
 
 
     @Override
-    @Page
+//    @Page
     @ParameterCheckAdvice(parameters = "articleId")
     public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO) {
         Wrapper<PageInfo<Node>> wrapper = selectByArticleId(commentVO);
@@ -118,9 +122,9 @@ public class CommentServiceImpl implements ICommentService {
         vo.setId(tNode.getId());
         vo.setContent(tNode.getComment());
         vo.setCreateDate(tNode.getCreateTime());
-        vo.setCommentUser(new CommentResponseVO.User(tNode.getId(),tNode.getCommenter(),""));
+        vo.setCommentUser(new CommentResponseVO.User(tNode.getId(),tNode.getCommenter(),tNode.getAvatarUrl()));
         if (Objects.nonNull(parent)){
-            vo.setTargetUser(new CommentResponseVO.User(parent.getId(),parentNode.getCommenter(),""));
+            vo.setTargetUser(new CommentResponseVO.User(parentNode.getId(),parentNode.getCommenter(),parentNode.getAvatarUrl()));
         }
         return vo;
     }

@@ -20,6 +20,7 @@ public class CommentController {
 
     @PostMapping("/add")
     public Wrapper<Comment> add(@RequestBody CommentVO commentVO){
+        System.out.println(commentVO);
         return iCommentService.insert(commentVO);
     }
 
@@ -28,12 +29,22 @@ public class CommentController {
         return iCommentService.delete(id);
     }
 
-    @GetMapping("/get/byarticleid")
+    /**
+     * 树形
+     * @param commentVO
+     * @return
+     */
+    @GetMapping("/v1/get/byarticleid")
     public Wrapper<PageInfo<Node>> selectByArticleId(CommentVO commentVO){
         return iCommentService.selectByArticleId(commentVO);
     }
 
-    @GetMapping("/get/byarticleid1")
+    /**
+     * 2 级
+     * @param commentVO
+     * @return
+     */
+    @GetMapping("/v2/get/byarticleid")
     public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO){
         return iCommentService.selectByArticleId1(commentVO);
     }

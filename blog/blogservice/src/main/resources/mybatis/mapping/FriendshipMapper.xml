@@ -14,7 +14,7 @@
     <result column="last_reviewer" jdbcType="TIMESTAMP" property="lastReviewer" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, friendship_name, avatar_method, third_party, personalized_url, signature, creator, 
+    id, friendship_name, avatar_method, third_party, personalized_url, signature, creator,
     create_time, update_time, last_reviewer
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -28,12 +28,12 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.chenum.po.Friendship">
-    insert into tb_friendship (id, friendship_name, avatar_method, 
-      third_party, personalized_url, signature, 
+    insert into tb_friendship (id, friendship_name, avatar_method,
+      third_party, personalized_url, signature,
       creator, create_time, update_time, 
       last_reviewer)
     values (#{id,jdbcType=VARCHAR}, #{friendshipName,jdbcType=VARCHAR}, #{avatarMethod,jdbcType=TINYINT}, 
-      #{thirdParty,jdbcType=VARCHAR}, #{personalizedUrl,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR}, 
+      #{thirdParty,jdbcType=VARCHAR}, #{personalizedUrl,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR},
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{lastReviewer,jdbcType=TIMESTAMP})
   </insert>

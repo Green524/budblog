@@ -27,3 +27,8 @@ mybatis:
   type-aliases-package: com.chenum.po
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+com:
+  chenum:
+#    using in:email : https://api.github.com/search/users?q=bmartel+in%3Aemail
+#    using in:username : https://api.github.com/search/users?q=Bertrand+Martel+in%3Ausername
+    avatar-url: https://avatars.githubusercontent.com/{username}

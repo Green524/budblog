@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CommentResponseVO {
-    private String id;
+    private Integer id;
 
     private User commentUser;
 
@@ -16,13 +16,13 @@ public class CommentResponseVO {
 
     private List<CommentResponseVO> childrenList;
 
-    public record User(String id,String nickName,String avatar){}
+    public record User(Integer id,String nickName,String avatar){}
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

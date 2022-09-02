@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Comment implements Serializable {
-    private String id;
+    private Integer id;
 
-    private String parentId;
+    private Integer parentId;
 
     private Byte status;
 
@@ -16,7 +16,7 @@ public class Comment implements Serializable {
 
     private String commenterEmail;
 
-    private String personalizedUrl;
+    private String avatarUrl;
 
     private String creator;
 
@@ -30,20 +30,20 @@ public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId == null ? null : parentId.trim();
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getArticleId() {
@@ -70,12 +70,12 @@ public class Comment implements Serializable {
         this.commenterEmail = commenterEmail == null ? null : commenterEmail.trim();
     }
 
-    public String getPersonalizedUrl() {
-        return personalizedUrl;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setPersonalizedUrl(String personalizedUrl) {
-        this.personalizedUrl = personalizedUrl == null ? null : personalizedUrl.trim();
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
     }
 
     public String getCreator() {

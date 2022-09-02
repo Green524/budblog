@@ -3,9 +3,9 @@ package com.chenum.tree;
 import java.util.List;
 
 public interface Node<T> {
-    String getId();
+    String id();
 
-    String getPid();
+    String pid();
 
     List<T> getChildren();
 

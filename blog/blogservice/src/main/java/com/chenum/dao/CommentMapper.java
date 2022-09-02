@@ -11,7 +11,7 @@ public interface CommentMapper {
 
     int insertSelective(Comment row);
 
-    Comment selectByPrimaryKey(String id);
+    Comment selectByPrimaryKey(Integer id);
 
     List<Comment> selectSelective(Comment row);
 

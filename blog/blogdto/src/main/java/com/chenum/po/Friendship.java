@@ -12,7 +12,7 @@ public class Friendship implements Serializable {
 
     private String thirdParty;
 
-    private String personalizedUrl;
+    private String avatarUrl;
 
     private String signature;
 
@@ -58,12 +58,12 @@ public class Friendship implements Serializable {
         this.thirdParty = thirdParty == null ? null : thirdParty.trim();
     }
 
-    public String getPersonalizedUrl() {
-        return personalizedUrl;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setPersonalizedUrl(String personalizedUrl) {
-        this.personalizedUrl = personalizedUrl == null ? null : personalizedUrl.trim();
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
     }
 
     public String getSignature() {

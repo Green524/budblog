@@ -1,5 +1,6 @@
 package com.chenum.mybatis;
 
+import com.chenum.config.properties.ConfigProperties;
 import com.chenum.dao.ArticleMapper;
 import com.chenum.po.Article;
 import com.chenum.util.JsonUtil;
@@ -20,13 +21,17 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
 import javax.annotation.Resource;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class MarkdownTest {
 
     String md = """
@@ -69,6 +74,8 @@ public class MarkdownTest {
 
     @Resource
     ArticleMapper articleMapper;
+    @Resource
+    ConfigProperties configProperties;
 
     @Test
     public void test(){
@@ -122,12 +129,8 @@ public class MarkdownTest {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream("C:\\Users\\admin\\Desktop\\tmp.txt");
-        byte[] b = new byte[1024];
-        int len = fileInputStream.read(b);
-        System.out.println(Arrays.toString(b));
+    @Test
+    public void test4(){
+        System.out.println(configProperties.getAvatarUrl());
     }
-
-
 }

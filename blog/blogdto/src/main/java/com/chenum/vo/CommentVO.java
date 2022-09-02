@@ -6,9 +6,9 @@ import java.util.Date;
 
 public class CommentVO extends BaseVO {
 
-    private String id;
+    private Integer id;
 
-    private String parentId;
+    private Integer parentId;
 
     private String articleId;
 
@@ -16,7 +16,7 @@ public class CommentVO extends BaseVO {
 
     private String commenterEmail;
 
-    private String personalizedUrl;
+    private String avatarUrl;
 
     private String creator;
 
@@ -28,20 +28,20 @@ public class CommentVO extends BaseVO {
 
     private Date updateTime;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId == null ? null : parentId.trim();
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getArticleId() {
@@ -68,12 +68,12 @@ public class CommentVO extends BaseVO {
         this.commenterEmail = commenterEmail == null ? null : commenterEmail.trim();
     }
 
-    public String getPersonalizedUrl() {
-        return personalizedUrl;
+    public String getavatarUrl() {
+        return avatarUrl;
     }
 
-    public void setPersonalizedUrl(String personalizedUrl) {
-        this.personalizedUrl = personalizedUrl == null ? null : personalizedUrl.trim();
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
     }
 
     public String getCreator() {
@@ -125,7 +125,7 @@ public class CommentVO extends BaseVO {
         sb.append(", articleId='").append(articleId).append('\'');
         sb.append(", commenter='").append(commenter).append('\'');
         sb.append(", commenterEmail='").append(commenterEmail).append('\'');
-        sb.append(", personalizedUrl='").append(personalizedUrl).append('\'');
+        sb.append(", avatarUrl='").append(avatarUrl).append('\'');
         sb.append(", creator='").append(creator).append('\'');
         sb.append(", lastReviewer=").append(lastReviewer);
         sb.append(", comment='").append(comment).append('\'');

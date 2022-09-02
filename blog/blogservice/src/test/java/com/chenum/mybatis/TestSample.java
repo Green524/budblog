@@ -19,7 +19,7 @@ import java.util.*;
 public class TestSample {
 
     @Test
-    public void objectMapper() throws JsonProcessingException {
+    public void objectMapper() {
         System.out.println(JsonUtil.toJsonString(new CommentVO()));
     }
 
@@ -38,14 +38,14 @@ public class TestSample {
     public void beanInfo() throws IntrospectionException, InvocationTargetException, IllegalAccessException {
         CommentTreeNode commentTreeNode = new CommentTreeNode();
         Comment comment = new Comment();
-        comment.setId("1");
-        comment.setParentId("hhhh");
+        comment.setId(1);
+        comment.setParentId(2);
 
         BeanUtils.copyProperties(comment,commentTreeNode);
 
         System.out.println(commentTreeNode.getId());
         System.out.println(commentTreeNode.getParentId());
-        System.out.println(commentTreeNode.getPid());
+        System.out.println(commentTreeNode.pid());
     }
 
     public Article article(){
