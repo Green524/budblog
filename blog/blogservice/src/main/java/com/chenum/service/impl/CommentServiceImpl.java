@@ -14,13 +14,13 @@ import com.chenum.response.Wrapper;
 import com.chenum.service.ICommentService;
 import com.chenum.tree.Node;
 import com.chenum.tree.TreeBuilder;
+import com.chenum.util.BeanUtils;
 import com.chenum.vo.CommentResponseVO;
 import com.chenum.vo.CommentTreeNode;
 import com.chenum.vo.CommentVO;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -75,27 +75,12 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     @Page
     @ParameterCheckAdvice(parameters = "articleId")
-    public Wrapper<PageInfo<Node>> selectByArticleId(CommentVO commentVO) {
-        Comment comment = new Comment();
-        comment.setArticleId(commentVO.getArticleId());
-        List<Comment> records = commentMapper.selectSelective(comment);
-        List<CommentTreeNode> commentTreeNodeVOS = new ArrayList<>();
-        for (Comment record : records) {
-            CommentTreeNode node = new CommentTreeNode();
-            BeanUtils.copyProperties(record,node);
-            commentTreeNodeVOS.add(node);
-        }
-        List<Node> list = new TreeBuilder().buildTreeList(commentTreeNodeVOS);
-        return WrapMapper.ok(PageInfo.of(list));
-    }
-
-
-    @Override
-//    @Page
-    @ParameterCheckAdvice(parameters = "articleId")
-    public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO) {
-        Wrapper<PageInfo<Node>> wrapper = selectByArticleId(commentVO);
-        List<Node> list = wrapper.data().getList();
+    public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId(CommentVO commentVO) {
+        List<CommentTreeNode> parentRecords = getParentComments(commentVO);
+        List<CommentTreeNode> subRecords = new ArrayList<>();
+        this.getSubComments(parentRecords,subRecords);
+        parentRecords.addAll(subRecords);
+        List<Node> list = new TreeBuilder().buildTreeList(parentRecords);
         List<CommentResponseVO> responseVOS = new ArrayList<>();
         for (Node node : list) {
             CommentResponseVO vo = responseCover(node,null);
@@ -104,6 +89,38 @@ public class CommentServiceImpl implements ICommentService {
             responseVOS.add(vo);
         }
         return WrapMapper.ok(PageInfo.of(responseVOS));
+    }
+
+    private List<CommentTreeNode> getParentComments(CommentVO commentVO){
+        Comment params = new Comment();
+        params.setArticleId(commentVO.getArticleId());
+        params.setParentId(0);
+        List<Comment> records = commentMapper.selectSelective(params);
+        List<CommentTreeNode> commentTreeNodes = new ArrayList<>(records.size());
+        for (Comment record : records) {
+            CommentTreeNode node = new CommentTreeNode();
+            com.chenum.util.BeanUtils.copyProperties(record,node);
+            commentTreeNodes.add(node);
+        }
+        return commentTreeNodes;
+    }
+    private void getSubComments(List<CommentTreeNode> parentRecords,List<CommentTreeNode> container){
+        Comment params = new Comment();
+        for (Comment parentRecord : parentRecords) {
+            params.setParentId(parentRecord.getId());
+            params.setArticleId(parentRecord.getArticleId());
+            List<Comment> subRecords = commentMapper.selectSelective(params);
+            List<CommentTreeNode> commentTreeNodes = new ArrayList<>(subRecords.size());
+            for (Comment subRecord : subRecords) {
+                CommentTreeNode node = new CommentTreeNode();
+                BeanUtils.copyProperties(subRecord,node);
+                commentTreeNodes.add(node);
+            }
+            container.addAll(commentTreeNodes);
+            if (!subRecords.isEmpty()){
+                getSubComments(commentTreeNodes,container);
+            }
+        }
     }
 
 

@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.chenum.po.Comment">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="comment" jdbcType="VARCHAR" property="comment"/>
-        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
         <result column="status" jdbcType="BIT" property="status"/>
         <result column="article_id" jdbcType="VARCHAR" property="articleId"/>
         <result column="commenter" jdbcType="VARCHAR" property="commenter"/>
@@ -24,8 +24,8 @@
         <if test="comment != null and comment != ''">
             and comment = #{comment,jdbcType=VARCHAR}
         </if>
-        <if test="parentId != null and parentId != ''">
-            and parent_id = #{parentId,jdbcType=VARCHAR}
+        <if test="parentId != null">
+            and parent_id = #{parentId,jdbcType=INTEGER}
         </if>
         <if test="status != null">
             and status = #{status,jdbcType=BIT}
@@ -78,7 +78,7 @@
         commenter, commenter_email, avatar_url,
         creator, create_time, update_time,
         last_reviewer, comment)
-        values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER},
         #{status,jdbcType=BIT},#{articleId,jdbcType=VARCHAR},
         #{commenter,jdbcType=VARCHAR}, #{commenterEmail,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR},
         #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
@@ -128,7 +128,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             id,
             <if test="parentId != null">
-                #{parentId,jdbcType=VARCHAR},
+                #{parentId,jdbcType=INTEGER},
             </if>
             <if test="status != null">
                 #{status,jdbcType=BIT},
@@ -170,7 +170,7 @@
         update tb_comment
         <set>
             <if test="parentId != null">
-                parent_id = #{parentId,jdbcType=VARCHAR},
+                parent_id = #{parentId,jdbcType=INTEGER},
             </if>
             <if test="status != null">
                 status = #{status,jdbcType=BIT},

@@ -30,24 +30,15 @@ public class CommentController {
     }
 
     /**
-     * 树形
+     * 两级数评论
      * @param commentVO
      * @return
      */
-    @GetMapping("/v1/get/byarticleid")
-    public Wrapper<PageInfo<Node>> selectByArticleId(CommentVO commentVO){
+    @GetMapping("/get/byarticleid")
+    public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId(CommentVO commentVO){
         return iCommentService.selectByArticleId(commentVO);
     }
 
-    /**
-     * 2 级
-     * @param commentVO
-     * @return
-     */
-    @GetMapping("/v2/get/byarticleid")
-    public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO){
-        return iCommentService.selectByArticleId1(commentVO);
-    }
 
     @PutMapping("/modify")
     public Wrapper<Comment> modify(@RequestBody CommentVO commentVO){

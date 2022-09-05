@@ -13,9 +13,7 @@ public interface ICommentService {
 
     Wrapper<Boolean> delete(String id);
 
-    Wrapper<PageInfo<Node>> selectByArticleId(CommentVO commentVO);
-
-    Wrapper<PageInfo<CommentResponseVO>> selectByArticleId1(CommentVO commentVO);
+    Wrapper<PageInfo<CommentResponseVO>> selectByArticleId(CommentVO commentVO);
 
     Wrapper<Comment> update(CommentVO commentVO);
 }
