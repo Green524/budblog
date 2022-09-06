@@ -32,3 +32,6 @@ com:
 #    using in:email : https://api.github.com/search/users?q=bmartel+in%3Aemail
 #    using in:username : https://api.github.com/search/users?q=Bertrand+Martel+in%3Ausername
     avatar-url: https://avatars.githubusercontent.com/{username}
+logging:
+  level:
+    com.chenum: debug

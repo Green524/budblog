@@ -1,12 +1,9 @@
 package com.chenum.service;
 
-import com.chenum.po.Article;
 import com.chenum.response.Wrapper;
 import com.chenum.vo.ArticleResponseVO;
 import com.chenum.vo.ArticleVO;
 import com.github.pagehelper.PageInfo;
-
-import java.util.List;
 
 public interface IArticleService {
 
@@ -22,5 +19,6 @@ public interface IArticleService {
 
 
     Wrapper<ArticleResponseVO> query( String id);
+
 
 }

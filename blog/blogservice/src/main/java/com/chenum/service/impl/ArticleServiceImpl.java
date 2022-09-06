@@ -90,7 +90,6 @@ public class ArticleServiceImpl implements IArticleService {
         return WrapMapper.ok(getArticleResponseVO(article));
     }
 
-
     private ArticleResponseVO getArticleResponseVO(Article article){
         ArticleResponseVO vo = new ArticleResponseVO();
         BeanUtils.copyProperties(article,vo,false);

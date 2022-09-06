@@ -40,7 +40,7 @@
             and author = #{author}
         </if>
         <if test="contentTag != null and contentTag != ''">
-            and content_tag like concat('%',#{markdown},'%')
+            and content_tag like concat('%',#{contentTag},'%')
         </if>
         <if test="wordCount != null">
             and word_count = #{wordCount}

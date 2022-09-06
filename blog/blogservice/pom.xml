@@ -9,13 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>blogservice</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.4</version>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mybatis.version>2.2.2</mybatis.version>
-        <mysql.version>8.0.29</mysql.version>
+        <mysql.version>8.0.30</mysql.version>
         <pagehelper.version>1.4.3</pagehelper.version>
     </properties>
     <dependencies>

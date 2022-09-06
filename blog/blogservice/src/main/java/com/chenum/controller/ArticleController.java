@@ -13,11 +13,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/blog")
+@RequestMapping("/api/blog")
 public class ArticleController {
 
     @Resource
@@ -49,6 +48,7 @@ public class ArticleController {
     public Wrapper<ArticleResponseVO> query(@PathVariable String id){
         return iArticleService.query(id);
     }
+
 
     @GetMapping("/addr")
     public Wrapper<Map> getAddr(HttpServletRequest request){
