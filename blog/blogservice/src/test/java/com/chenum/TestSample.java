@@ -1,4 +1,4 @@
-package com.chenum.mybatis;
+package com.chenum;
 
 import com.chenum.po.Article;
 import com.chenum.po.Comment;

@@ -1,0 +1,32 @@
+server:
+  port: 8843
+spring:
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  application:
+    name: blogservice
+  datasource:
+    url: jdbc:mysql://115.29.201.100:3306/db_user?autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: qTfGhoa%.9UvxTru
+    hikari:
+      connection-timeout: 10000
+      validation-timeout: 3000
+      idle-timeout: 20000
+      login-timeout: 5
+      max-lifetime: 60000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      read-only: false
+  main:
+    banner-mode: off
+#mybatis:
+#  mapper-locations: classpath:/mybatis/mapping/*.xml
+#  type-aliases-package: com.chenum.po
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#logging:
+#  level:
+#    com.chenum: debug

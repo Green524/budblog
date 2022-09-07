@@ -1,4 +1,4 @@
-package com.chenum.mybatis;
+package com.chenum.md;
 
 import com.chenum.config.properties.ConfigProperties;
 import com.chenum.dao.ArticleMapper;
