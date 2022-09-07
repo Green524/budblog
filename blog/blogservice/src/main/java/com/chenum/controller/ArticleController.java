@@ -1,6 +1,6 @@
 package com.chenum.controller;
 
-import com.chenum.po.Article;
+import com.chenum.annotation.ApiPass;
 import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
@@ -39,12 +39,14 @@ public class ArticleController {
     }
 
     @GetMapping("/query/page")
+    @ApiPass
     public Wrapper<PageInfo<ArticleResponseVO>> selectByPage(ArticleVO articleVO){
         return iArticleService.selectByPage(articleVO);
     }
 
 
     @GetMapping("/query/{id}")
+    @ApiPass
     public Wrapper<ArticleResponseVO> query(@PathVariable String id){
         return iArticleService.query(id);
     }

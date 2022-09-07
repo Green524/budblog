@@ -26,4 +26,13 @@ public class WrapMapper {
     public static <T> Wrapper<T> wrap(int code,String message,T data){
         return new Wrapper<>(code,message,data);
     }
+    public static <T> Wrapper<T> wrap(int code,String message){
+        return new Wrapper<>(code,message,null);
+    }
+    public static <T> Wrapper<T> denied(){
+        return new Wrapper<>(401,"没有权限",null);
+    }
+    public static <T> Wrapper<T> denied(T data){
+        return new Wrapper<>(401,"没有权限",data);
+    }
 }

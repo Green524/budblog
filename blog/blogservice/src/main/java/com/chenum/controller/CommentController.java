@@ -1,5 +1,6 @@
 package com.chenum.controller;
 
+import com.chenum.annotation.ApiPass;
 import com.chenum.po.Comment;
 import com.chenum.response.Wrapper;
 import com.chenum.service.ICommentService;
@@ -20,7 +21,6 @@ public class CommentController {
 
     @PostMapping("/add")
     public Wrapper<Comment> add(@RequestBody CommentVO commentVO){
-        System.out.println(commentVO);
         return iCommentService.insert(commentVO);
     }
 
@@ -35,6 +35,7 @@ public class CommentController {
      * @return
      */
     @GetMapping("/get/byarticleid")
+    @ApiPass
     public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId(CommentVO commentVO){
         return iCommentService.selectByArticleId(commentVO);
     }
