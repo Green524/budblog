@@ -1,0 +1,50 @@
+server:
+  port: 8843
+spring:
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  application:
+    name: userservice
+  datasource:
+    url: jdbc:mysql://115.29.201.100:3306/db_user?autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: qTfGhoa%.9UvxTru
+    hikari:
+      connection-timeout: 10000
+      validation-timeout: 3000
+      idle-timeout: 20000
+      login-timeout: 5
+      max-lifetime: 60000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      read-only: false
+  main:
+    banner-mode: off
+#mybatis:
+#  mapper-locations: classpath:/mybatis/mapping/*.xml
+#  type-aliases-package: com.chenum.po
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#logging:
+#  level:
+#    com.chenum: debug
+nacos:
+  config:
+    server-addr: localhost:8848
+  discovery:
+    auto-register: true
+    namespace: 2d389139-eb2e-4b67-acd9-690af46db125
+    register:
+      instance-id: ${spring.application.name}
+      ip: localhost
+      port: 8848
+      enabled: true
+    server-addr: localhost:8848
+    username: nacos
+    password: nacos
+management:
+  endpoints:
+    web:
+      base-path: /health
