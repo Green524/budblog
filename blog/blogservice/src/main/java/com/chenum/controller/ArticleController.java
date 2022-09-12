@@ -1,18 +1,18 @@
 package com.chenum.controller;
 
 import com.chenum.annotation.ApiPass;
+import com.chenum.dubbo.service.IUserService;
 import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
 import com.chenum.vo.ArticleResponseVO;
 import com.chenum.vo.ArticleVO;
 import com.github.pagehelper.PageInfo;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -21,6 +21,8 @@ public class ArticleController {
 
     @Resource
     private IArticleService iArticleService;
+    @DubboReference
+    private IUserService iUserService;
 
     @PostMapping("/add")
     public Wrapper<ArticleResponseVO> add(@RequestBody ArticleVO articleVO){
@@ -52,18 +54,10 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/addr")
-    public Wrapper<Map> getAddr(HttpServletRequest request){
-        Enumeration<String> enumeration = request.getHeaderNames();
-        Map<String,Object> map = new HashMap<>();
-        String ip = request.getRemoteAddr();
-        map.put("remoteAddr", ip);
-        while (enumeration.hasMoreElements()){
-            String key = enumeration.nextElement();
-            String value = request.getHeader(key);
-            map.put(key,value);
-        }
-        return WrapMapper.ok(map);
+    @GetMapping("/get")
+    @ApiPass
+    public Wrapper<String> getAddr(HttpServletRequest request){
+        System.out.println(iUserService);
+        return WrapMapper.ok(iUserService.sayHello("cpq"));
     }
-
 }

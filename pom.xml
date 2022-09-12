@@ -7,7 +7,6 @@
         <module>blog</module>
         <module>user</module>
         <module>common</module>
-        <module>nacos</module>
     </modules>
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>

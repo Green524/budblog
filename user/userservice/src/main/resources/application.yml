@@ -31,20 +31,37 @@ spring:
 #  level:
 #    com.chenum: debug
 nacos:
-  config:
-    server-addr: localhost:8848
   discovery:
     auto-register: true
-    namespace: 2d389139-eb2e-4b67-acd9-690af46db125
+    namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
     register:
-      instance-id: ${spring.application.name}
-      ip: localhost
-      port: 8848
       enabled: true
-    server-addr: localhost:8848
-    username: nacos
-    password: nacos
+      group-name: blog
+      service-name: ${spring.application.name}
+    server-addr: 127.0.0.1:8848
+  config:
+    data-id: blogdataid
+    group: blog
+    auto-refresh: true
+    namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
+    server-addr: 127.0.0.1:8848
+    bootstrap:
+      enable: true
 management:
   endpoints:
     web:
       base-path: /health
+dubbo:
+  application:
+    name: userservice
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos
+    address: nacos://127.0.0.1:8848
+  config-center:
+    address: nacos://127.0.0.1:8848
+  metadata-report:
+    address: nacos://127.0.0.1:8848
+

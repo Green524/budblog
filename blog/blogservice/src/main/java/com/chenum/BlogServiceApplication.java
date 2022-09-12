@@ -1,5 +1,6 @@
 package com.chenum;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication
 @MapperScan("com.chenum.dao")
-//@EnableConfigurationProperties
+@EnableDubbo
 public class BlogServiceApplication {
     static{
         System.setProperty("pagehelper.banner", "false");

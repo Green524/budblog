@@ -27,6 +27,23 @@ mybatis:
   type-aliases-package: com.chenum.po
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+nacos:
+  discovery:
+    auto-register: true
+    namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
+    register:
+      enabled: true
+      group-name: blog
+      service-name: ${spring.application.name}
+    server-addr: 127.0.0.1:8848
+  config:
+    data-id: blogdataid
+    group: blog
+    auto-refresh: true
+    namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
+    server-addr: 127.0.0.1:8848
+    bootstrap:
+      enable: true
 com:
   chenum:
 #    using in:email : https://api.github.com/search/users?q=bmartel+in%3Aemail
@@ -35,3 +52,16 @@ com:
 logging:
   level:
     com.chenum: debug
+dubbo:
+  application:
+    name: blogservice
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos
+    address: nacos://127.0.0.1:8848
+  config-center:
+    address: nacos://127.0.0.1:8848
+  metadata-report:
+    address: nacos://127.0.0.1:8848
