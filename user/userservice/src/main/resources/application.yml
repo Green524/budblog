@@ -51,19 +51,10 @@ management:
   endpoints:
     web:
       base-path: /health
-#dubbo:
-#  registry:
-#    registry-mode: instance/interface/all
-#    address: nacos://115.29.201.100:8848
-#    group: blog
-#    parameters:
-#      username: nacos
-#      password: nacos
-#      namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
-#      register-consumer-url: false
 dubbo:
   application:
     name: dubbo-springboot-demo-provider
+    register-consumer: false
   protocol:
     name: dubbo
     port: 20880
@@ -71,14 +62,8 @@ dubbo:
     id: nacos-registry
     address: nacos://115.29.201.100:8848
     group: blog
-  config-center:
-    address: nacos://115.29.201.100:8848
-    group: blog
-  metadata-report:
-    address: nacos://115.29.201.100:8848
-    group: blog
-  consumer:
-    group: blog
+    parameters:
+      namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
   provider:
     group: blog
 

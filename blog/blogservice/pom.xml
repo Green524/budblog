@@ -104,11 +104,6 @@
 <!--            <artifactId>dubbo-registry-nacos</artifactId>-->
 <!--            <version>3.0.9</version>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>com.chenum</groupId>
-            <artifactId>userservice</artifactId>
-            <version>0.0.1</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>

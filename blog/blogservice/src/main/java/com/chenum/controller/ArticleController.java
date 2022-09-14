@@ -13,8 +13,6 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -22,14 +20,9 @@ public class ArticleController {
 
     @Resource
     private IArticleService iArticleService;
-    @DubboReference
-    private IUserService iUserService;
-    @NacosValue("${secret:cpq}")
-    private String secret;
 
     @PostMapping("/add")
     public Wrapper<ArticleResponseVO> add(@RequestBody ArticleVO articleVO){
-        System.out.println(articleVO);
         return iArticleService.add(articleVO);
     }
     @PutMapping("/update")
@@ -56,11 +49,4 @@ public class ArticleController {
         return iArticleService.query(id);
     }
 
-
-    @GetMapping("/get")
-    @ApiPass
-    public Wrapper<String> getAddr(HttpServletRequest request){
-        System.out.println(iUserService);
-        return WrapMapper.ok(iUserService.sayHello(secret));
-    }
 }

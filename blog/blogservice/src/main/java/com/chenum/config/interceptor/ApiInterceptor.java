@@ -1,10 +1,14 @@
 package com.chenum.config.interceptor;
 
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.chenum.annotation.ApiPass;
+import com.chenum.dubbo.service.IUserService;
 import com.chenum.response.WrapMapper;
 import com.chenum.response.Wrapper;
+import com.chenum.util.JWTUtil;
 import com.chenum.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.pdfbox.pdmodel.font.encoding.StandardEncoding;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
@@ -24,6 +28,11 @@ public class ApiInterceptor implements HandlerInterceptor {
 
     private static final Wrapper error = WrapMapper.denied();
 
+    @DubboReference
+    private IUserService iUserService;
+    @NacosValue(value = "${secret:cpq}",autoRefreshed = true)
+    private String secret;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("进入拦截器");
@@ -34,9 +43,11 @@ public class ApiInterceptor implements HandlerInterceptor {
             String accessToken = request.getHeader("ch_access_token");
             log.info("调用{}接口时被拦截",method.getName());
             if (!StringUtils.hasText(accessToken)){
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("Content-Type:application/json");
-                response.getWriter().println(JsonUtil.toJsonString(error,true));
+                Wrapper<Boolean> wrap = iUserService.authVerify(secret,accessToken);
+                if (wrap.success() && wrap.data().equals(Boolean.TRUE)){
+                    return true;
+                }
+                response.setStatus(403);
                 return false;
             }
         }
