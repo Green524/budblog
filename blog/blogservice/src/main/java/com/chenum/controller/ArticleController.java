@@ -1,5 +1,6 @@
 package com.chenum.controller;
 
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.chenum.annotation.ApiPass;
 import com.chenum.dubbo.service.IUserService;
 import com.chenum.response.WrapMapper;
@@ -23,6 +24,8 @@ public class ArticleController {
     private IArticleService iArticleService;
     @DubboReference
     private IUserService iUserService;
+    @NacosValue("${secret:cpq}")
+    private String secret;
 
     @PostMapping("/add")
     public Wrapper<ArticleResponseVO> add(@RequestBody ArticleVO articleVO){
@@ -58,6 +61,6 @@ public class ArticleController {
     @ApiPass
     public Wrapper<String> getAddr(HttpServletRequest request){
         System.out.println(iUserService);
-        return WrapMapper.ok(iUserService.sayHello("cpq"));
+        return WrapMapper.ok(iUserService.sayHello(secret));
     }
 }

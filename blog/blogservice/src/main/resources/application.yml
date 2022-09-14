@@ -35,13 +35,13 @@ nacos:
       enabled: true
       group-name: blog
       service-name: ${spring.application.name}
-    server-addr: 127.0.0.1:8848
+    server-addr: 115.29.201.100:8848
   config:
-    data-id: blogdataid
+    data-id: blog-data-id
     group: blog
     auto-refresh: true
     namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
-    server-addr: 127.0.0.1:8848
+    server-addr: 115.29.201.100:8848
     bootstrap:
       enable: true
 com:
@@ -52,16 +52,34 @@ com:
 logging:
   level:
     com.chenum: debug
+#dubbo:
+#  registry:
+#    address: nacos://115.29.201.100:8848
+#    group: blog
+#    parameters:
+#      username: nacos
+#      password: nacos
+#      namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
+#      register-consumer-url: true
+#    protocol: dubbo
+#    port: 20881
 dubbo:
   application:
-    name: blogservice
+    name: dubbo-springboot-demo-consumer
   protocol:
     name: dubbo
-    port: -1
+    port: 20881
   registry:
-    id: nacos
-    address: nacos://127.0.0.1:8848
+    id: nacos-registry
+    address: nacos://115.29.201.100:8848
+    group: blog
   config-center:
-    address: nacos://127.0.0.1:8848
+    address: nacos://115.29.201.100:8848
+    group: blog
   metadata-report:
-    address: nacos://127.0.0.1:8848
+    address: nacos://115.29.201.100:8848
+    group: blog
+  consumer:
+    group: blog
+  provider:
+    group: blog
