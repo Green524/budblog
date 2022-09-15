@@ -26,8 +26,6 @@ import java.util.Objects;
 @Slf4j
 public class ApiInterceptor implements HandlerInterceptor {
 
-    private static final Wrapper error = WrapMapper.denied();
-
     @DubboReference
     private IUserService iUserService;
     @NacosValue(value = "${secret:cpq}",autoRefreshed = true)
@@ -41,15 +39,17 @@ public class ApiInterceptor implements HandlerInterceptor {
         ApiPass apiPass = method.getAnnotation(ApiPass.class);
         if (Objects.isNull(apiPass)){
             String accessToken = request.getHeader("ch_access_token");
-            log.info("调用{}接口时被拦截",method.getName());
-            if (!StringUtils.hasText(accessToken)){
-                Wrapper<Boolean> wrap = iUserService.authVerify(secret,accessToken);
-                if (wrap.success() && wrap.data().equals(Boolean.TRUE)){
+            log.warn("调用{}接口时被拦截",method.getName());
+            if (StringUtils.hasText(accessToken)){
+                Wrapper<String> wrap = iUserService.authVerify(secret,accessToken);
+                if (wrap.success() && wrap.data().equals("true")){
                     return true;
                 }
                 response.setStatus(403);
                 return false;
             }
+            response.setStatus(403);
+            return false;
         }
         return true;
     }

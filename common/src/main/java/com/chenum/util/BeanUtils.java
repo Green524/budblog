@@ -34,8 +34,10 @@ public class BeanUtils {
                 method.invoke(target, value);
             } catch (IllegalArgumentException iae){
 
-            }catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException nsme) {
-                nsme.printStackTrace();
+            }catch (NoSuchMethodException nsme) {
+
+            }catch (IllegalAccessException | InvocationTargetException e){
+                e.printStackTrace();
             }
         }
     }

@@ -22,14 +22,14 @@ spring:
       read-only: false
   main:
     banner-mode: off
-#mybatis:
-#  mapper-locations: classpath:/mybatis/mapping/*.xml
-#  type-aliases-package: com.chenum.po
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#logging:
-#  level:
-#    com.chenum: debug
+mybatis:
+  mapper-locations: classpath:/mybatis/mapping/*.xml
+  type-aliases-package: com.chenum.po
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    com.chenum: debug
 nacos:
   discovery:
     auto-register: true
@@ -58,6 +58,8 @@ dubbo:
   protocol:
     name: dubbo
     port: 20880
+#    optimizer: org.apache.dubbo.common.serialize.fastjson2.FastJson2Serialization
+    serialization: nativejava
   registry:
     id: nacos-registry
     address: nacos://115.29.201.100:8848

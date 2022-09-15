@@ -23,7 +23,7 @@
             <property name="forceBigDecimals" value="false" />
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.chenum.po" targetProject="D:\IdeaProjects\budblog\user\userdto\src\main\java\">
+        <javaModelGenerator targetPackage="com.chenum.po" targetProject="D:\IdeaProjects\budblog\user\userdto\src\main\java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
@@ -39,9 +39,6 @@
         <table schema="db_user" tableName="tb_user"  domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
             <property name="useActualColumnNames" value="false"/>
-            <columnOverride column="content" javaType="java.lang.String" jdbcType="TEXT" />
-            <columnOverride column="author" javaType="java.lang.String" jdbcType="JSON" />
-            <columnOverride column="content_tag" javaType="java.lang.String" jdbcType="TEXT" />
         </table>
     </context>
 </generatorConfiguration>

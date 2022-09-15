@@ -10,7 +10,7 @@
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, password, creator, create_time, update_time, last_reviewer
+    id, username, password, identity_type, createTime, updateTime
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -28,15 +28,21 @@
     delete from tb_user
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.chenum.po.User">
+  <insert id="insert" parameterType="com.chenum.po.User" keyProperty="id" useGeneratedKeys="true">
     insert into tb_user (id, username, password, 
-      creator, create_time, update_time, 
-      last_reviewer)
+      identity_type, createTime, updateTime
+      )
     values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{lastReviewer,jdbcType=TIMESTAMP})
+      #{identityType,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+    <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+      SELECT UUID_SHORT() FROM DUAL
+    </selectKey>
   </insert>
   <insert id="insertSelective" parameterType="com.chenum.po.User">
+    <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+      SELECT UUID_SHORT() FROM DUAL
+    </selectKey>
     insert into tb_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -48,17 +54,14 @@
       <if test="password != null">
         password,
       </if>
-      <if test="creator != null">
-        creator,
+      <if test="identityType != null">
+        identity_type,
       </if>
       <if test="createTime != null">
-        create_time,
+        createTime,
       </if>
       <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="lastReviewer != null">
-        last_reviewer,
+        updateTime,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -71,17 +74,14 @@
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
+      <if test="identityType != null">
+        #{identityType,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastReviewer != null">
-        #{lastReviewer,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -94,17 +94,14 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
+      <if test="identityType != null">
+        identity_type = #{identityType,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+        createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastReviewer != null">
-        last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP},
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -113,10 +110,9 @@
     update tb_user
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      last_reviewer = #{lastReviewer,jdbcType=TIMESTAMP}
+      identity_type = #{identityType,jdbcType=TINYINT},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
