@@ -58,6 +58,7 @@ public class CommentServiceImpl implements ICommentService {
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentVO, comment);
         comment.setAvatarUrl(configProperties.getAvatarUrl().replace("{username}",comment.getCommenter()));
+        comment.setStatus((byte)100);
         commentMapper.insertSelective(comment);
         return WrapMapper.ok();
     }
@@ -95,6 +96,7 @@ public class CommentServiceImpl implements ICommentService {
         Comment params = new Comment();
         params.setArticleId(commentVO.getArticleId());
         params.setParentId(0);
+        params.setStatus((byte)100);
         List<Comment> records = commentMapper.selectSelective(params);
         List<CommentTreeNode> commentTreeNodes = new ArrayList<>(records.size());
         for (Comment record : records) {
@@ -109,6 +111,7 @@ public class CommentServiceImpl implements ICommentService {
         for (Comment parentRecord : parentRecords) {
             params.setParentId(parentRecord.getId());
             params.setArticleId(parentRecord.getArticleId());
+            params.setStatus((byte)100);
             List<Comment> subRecords = commentMapper.selectSelective(params);
             List<CommentTreeNode> commentTreeNodes = new ArrayList<>(subRecords.size());
             for (Comment subRecord : subRecords) {

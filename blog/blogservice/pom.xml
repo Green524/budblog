@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>blogservice</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.8</version>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -99,11 +99,6 @@
             <artifactId>dubbo-spring-boot-starter</artifactId>
             <version>${dubbo.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.apache.dubbo</groupId>-->
-<!--            <artifactId>dubbo-registry-nacos</artifactId>-->
-<!--            <version>3.0.9</version>-->
-<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>

@@ -19,6 +19,7 @@ public class CommentController {
     private ICommentService iCommentService;
 
     @PostMapping("/add")
+    @ApiPass
     public Wrapper<Comment> add(@RequestBody CommentVO commentVO){
         return iCommentService.insert(commentVO);
     }

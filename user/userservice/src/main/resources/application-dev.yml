@@ -31,6 +31,10 @@ logging:
   level:
     com.chenum: debug
 nacos:
+  server-address: ${NACOS-ADDRESS:127.0.0.1}
+  port: ${NACOS-PORT:8848}
+  username: ${NACOS-USERNAME:nacos}
+  password: ${NACOS-PASSWORD:nacos}
   discovery:
     auto-register: true
     namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
@@ -38,35 +42,38 @@ nacos:
       enabled: true
       group-name: blog
       service-name: ${spring.application.name}
-    server-addr: 115.29.201.100:8848
+    server-addr: ${nacos.server-address}:${nacos.port}
+    username: ${nacos.username}
+    password: ${nacos.password}
   config:
     data-id: blog-data-id
     group: blog
     auto-refresh: true
     namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
-    server-addr: 115.29.201.100:8848
+    server-addr: ${nacos.server-address}:${nacos.port}
     bootstrap:
       enable: true
+    username: ${nacos.username}
+    password: ${nacos.password}
 management:
   endpoints:
     web:
       base-path: /health
 dubbo:
   application:
-    name: dubbo-springboot-demo-provider
+    name: userservice-provider
     register-consumer: false
   protocol:
     name: dubbo
     port: 20880
-#    optimizer: org.apache.dubbo.common.serialize.fastjson2.FastJson2Serialization
+    #    optimizer: org.apache.dubbo.common.serialize.fastjson2.FastJson2Serialization
     serialization: nativejava
   registry:
     id: nacos-registry
-    address: nacos://115.29.201.100:8848
+    address: nacos://${nacos.server-address}:${nacos.port}/?username=${nacos.username}&password=${nacos.password}
     group: blog
     parameters:
       namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
   provider:
     group: blog
-
 

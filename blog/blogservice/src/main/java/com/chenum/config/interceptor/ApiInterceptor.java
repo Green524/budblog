@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Objects;
 
 @Configuration
@@ -33,13 +35,18 @@ public class ApiInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("进入拦截器");
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         ApiPass apiPass = method.getAnnotation(ApiPass.class);
         if (Objects.isNull(apiPass)){
-            String accessToken = request.getHeader("ch_access_token");
             log.warn("调用{}接口时被拦截",method.getName());
+            String accessToken = request.getHeader("ch_access_token");
+            Enumeration<String> enumeration = request.getHeaderNames();
+            while(enumeration.hasMoreElements()){
+                String key = enumeration.nextElement();
+                log.warn(key + ": "+ request.getHeader(key));
+            }
+
             if (StringUtils.hasText(accessToken)){
                 Wrapper<String> wrap = iUserService.authVerify(secret,accessToken);
                 if (wrap.success() && wrap.data().equals("true")){

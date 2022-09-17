@@ -1,0 +1,82 @@
+server:
+  port: 8842
+spring:
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  application:
+    name: blogservice
+  datasource:
+    url: jdbc:mysql://115.29.201.100:3306/db_blog?autoReconnect=true&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: qTfGhoa%.9UvxTru
+    hikari:
+      connection-timeout: 10000
+      validation-timeout: 3000
+      idle-timeout: 20000
+      login-timeout: 5
+      max-lifetime: 60000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      read-only: false
+  main:
+    banner-mode: off
+mybatis:
+  mapper-locations: classpath:/mybatis/mapping/*.xml
+  type-aliases-package: com.chenum.po
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#nacos discovery 和 config center
+nacos:
+  server-address: ${NACOS-ADDRESS:127.0.0.1}
+  port: ${NACOS-PORT:8848}
+  username: ${NACOS-USERNAME:nacos}
+  password: ${NACOS-PASSWORD:nacos}
+  discovery:
+    auto-register: true
+    namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
+    register:
+      enabled: true
+      group-name: blog
+      service-name: ${spring.application.name}
+    server-addr: ${nacos.server-address}:${nacos.port}
+    username: ${nacos.username}
+    password: ${nacos.password}
+  config:
+    data-id: blog-data-id
+    group: blog
+    namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
+    server-addr: ${nacos.server-address}:${nacos.port}
+    username: ${nacos.username}
+    password: ${nacos.password}
+    bootstrap:
+      enable: true
+    auto-refresh: true
+logging:
+  level:
+    com.chenum: debug
+#dubbo服务配置
+dubbo:
+  application:
+    name: blogservice-consumer
+    register-consumer: true
+  protocol:
+    name: dubbo
+    port: 20881
+  registry:
+    id: nacos-registry
+    address: nacos://${nacos.server-address}:${nacos.port}/?username=${nacos.username}&password=${nacos.password}
+    group: blog
+    parameters:
+      namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
+  scan:
+    base-packages: com.chenum.dubbo.service
+  consumer:
+    group: blog
+
+com:
+  chenum:
+    #    using in:email : https://api.github.com/search/users?q=bmartel+in%3Aemail
+    #    using in:username : https://api.github.com/search/users?q=Bertrand+Martel+in%3Ausername
+    avatar-url: https://avatars.githubusercontent.com/{username}

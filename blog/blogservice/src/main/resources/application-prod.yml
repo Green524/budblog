@@ -29,6 +29,10 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #nacos discovery 和 config center
 nacos:
+  server-address: ${NACOS-ADDRESS:43.143.115.227}
+  port: ${NACOS-PORT:8848}
+  username: ${NACOS-USERNAME:nacos}
+  password: ${NACOS-PASSWORD:6wRCCwK78WANNL}
   discovery:
     auto-register: true
     namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
@@ -36,12 +40,16 @@ nacos:
       enabled: true
       group-name: blog
       service-name: ${spring.application.name}
-    server-addr: 115.29.201.100:8848
+    server-addr: ${nacos.server-address}:${nacos.port}
+    username: ${nacos.username}
+    password: ${nacos.password}
   config:
     data-id: blog-data-id
     group: blog
     namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
-    server-addr: 115.29.201.100:8848
+    server-addr: ${nacos.server-address}:${nacos.port}
+    username: ${nacos.username}
+    password: ${nacos.password}
     bootstrap:
       enable: true
     auto-refresh: true
@@ -51,19 +59,17 @@ logging:
 #dubbo服务配置
 dubbo:
   application:
-    name: dubbo-springboot-demo-consumer
+    name: blogservice-consumer
     register-consumer: true
   protocol:
     name: dubbo
     port: 20881
   registry:
     id: nacos-registry
-    address: nacos://115.29.201.100:8848
+    address: nacos://${nacos.server-address}:${nacos.port}/?username=${nacos.username}&password=${nacos.password}
     group: blog
     parameters:
       namespace: 7bc13313-7c4d-45a8-bf9f-415fa8678961
-      username: nacos
-      password: nacos
   scan:
     base-packages: com.chenum.dubbo.service
   consumer:

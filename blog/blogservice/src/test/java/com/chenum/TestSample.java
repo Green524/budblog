@@ -7,13 +7,10 @@ import com.chenum.util.JsonUtil;
 import com.chenum.vo.ArticleVO;
 import com.chenum.vo.CommentTreeNode;
 import com.chenum.vo.CommentVO;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Test;
 
 
-import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class TestSample {
@@ -35,7 +32,7 @@ public class TestSample {
 
 
     @Test
-    public void beanInfo() throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+    public void beanInfo()  {
         CommentTreeNode commentTreeNode = new CommentTreeNode();
         Comment comment = new Comment();
         comment.setId(1);
