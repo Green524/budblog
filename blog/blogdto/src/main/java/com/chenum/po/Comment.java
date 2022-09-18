@@ -28,6 +28,8 @@ public class Comment implements Serializable {
 
     private String comment;
 
+    private Boolean isAuthor;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -124,5 +126,13 @@ public class Comment implements Serializable {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Boolean getIsAuthor() {
+        return isAuthor;
+    }
+
+    public void setIsAuthor(Boolean author) {
+        isAuthor = author;
     }
 }

@@ -14,10 +14,11 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="last_reviewer" jdbcType="VARCHAR" property="lastReviewer"/>
+        <result column="is_author" jdbcType="BIT" property="isAuthor"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, comment,parent_id, status, article_id, commenter, commenter_email, avatar_url, creator,
-    create_time, update_time, last_reviewer
+    create_time, update_time, last_reviewer,is_author
     </sql>
     <sql id="Conditional_List">
         where 1 = 1
@@ -54,6 +55,9 @@
         <if test="lastReviewer != null">
             and last_reviewer = #{lastReviewer,jdbcType=VARCHAR}
         </if>
+        <if test="isAuthor != null">
+            and is_author != #{isAuthor,jdbcType=BIT}
+        </if>
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -77,12 +81,12 @@
         insert into tb_comment (id, parent_id, status,article_id,
         commenter, commenter_email, avatar_url,
         creator, create_time, update_time,
-        last_reviewer, comment)
+        last_reviewer, comment,is_author)
         values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER},
         #{status,jdbcType=BIT},#{articleId,jdbcType=VARCHAR},
         #{commenter,jdbcType=VARCHAR}, #{commenterEmail,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR},
         #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
-        #{lastReviewer,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR})
+        #{lastReviewer,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR},#{isAuthor,jdbcType=BIT})
         <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -124,6 +128,9 @@
             <if test="comment != null">
                 comment,
             </if>
+            <if test="isAuthor != null">
+                is_author,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             id,
@@ -159,6 +166,9 @@
             </if>
             <if test="comment != null">
                 #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="isAuthor != null">
+                #{isAuthor,jdbcType=VARCHAR},
             </if>
         </trim>
         <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
@@ -202,6 +212,9 @@
             <if test="comment != null">
                 comment = #{comment,jdbcType=VARCHAR},
             </if>
+            <if test="isAuthor != null">
+                is_author = #{isAuthor,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}
     </update>
@@ -217,7 +230,8 @@
             create_time      = #{createTime,jdbcType=TIMESTAMP},
             update_time      = #{updateTime,jdbcType=TIMESTAMP},
             last_reviewer    = #{lastReviewer,jdbcType=VARCHAR},
-            comment          = #{comment,jdbcType=VARCHAR}
+            comment          = #{comment,jdbcType=VARCHAR},
+            is_author        = #{isAuthor,jdbcType=BIT}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

@@ -58,7 +58,7 @@ public class CommentServiceImpl implements ICommentService {
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentVO, comment);
         comment.setAvatarUrl(configProperties.getAvatarUrl().replace("{username}",comment.getCommenter()));
-        comment.setStatus((byte)100);
+        comment.setStatus(comment.getIsAuthor() ? (byte) 200 : (byte)100);
         commentMapper.insertSelective(comment);
         return WrapMapper.ok();
     }
@@ -96,12 +96,12 @@ public class CommentServiceImpl implements ICommentService {
         Comment params = new Comment();
         params.setArticleId(commentVO.getArticleId());
         params.setParentId(0);
-        params.setStatus((byte)100);
+        params.setStatus(commentVO.getIsAuthor() ? null : (byte)100);
         List<Comment> records = commentMapper.selectSelective(params);
         List<CommentTreeNode> commentTreeNodes = new ArrayList<>(records.size());
         for (Comment record : records) {
             CommentTreeNode node = new CommentTreeNode();
-            com.chenum.util.BeanUtils.copyProperties(record,node);
+            BeanUtils.copyProperties(record,node);
             commentTreeNodes.add(node);
         }
         return commentTreeNodes;
@@ -111,7 +111,7 @@ public class CommentServiceImpl implements ICommentService {
         for (Comment parentRecord : parentRecords) {
             params.setParentId(parentRecord.getId());
             params.setArticleId(parentRecord.getArticleId());
-            params.setStatus((byte)100);
+            params.setStatus(parentRecord.getIsAuthor() ? null : (byte)100);
             List<Comment> subRecords = commentMapper.selectSelective(params);
             List<CommentTreeNode> commentTreeNodes = new ArrayList<>(subRecords.size());
             for (Comment subRecord : subRecords) {
@@ -142,9 +142,15 @@ public class CommentServiceImpl implements ICommentService {
         vo.setId(tNode.getId());
         vo.setContent(tNode.getComment());
         vo.setCreateDate(tNode.getCreateTime());
-        vo.setCommentUser(new CommentResponseVO.User(tNode.getId(),tNode.getCommenter(),tNode.getAvatarUrl()));
+        vo.setCommentUser(new CommentResponseVO.User(
+                tNode.getId(),
+                tNode.getCommenter(),
+                tNode.getIsAuthor(),
+                tNode.getAvatarUrl()
+                )
+        );
         if (Objects.nonNull(parent)){
-            vo.setTargetUser(new CommentResponseVO.User(parentNode.getId(),parentNode.getCommenter(),parentNode.getAvatarUrl()));
+            vo.setTargetUser(new CommentResponseVO.User(parentNode.getId(),parentNode.getCommenter(),parentNode.getIsAuthor(),parentNode.getAvatarUrl()));
         }
         return vo;
     }

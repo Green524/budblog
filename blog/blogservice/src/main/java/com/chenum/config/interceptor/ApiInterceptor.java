@@ -38,26 +38,24 @@ public class ApiInterceptor implements HandlerInterceptor {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         ApiPass apiPass = method.getAnnotation(ApiPass.class);
-        if (Objects.isNull(apiPass)){
-            log.warn("调用{}接口时被拦截",method.getName());
-            String accessToken = request.getHeader("ch_access_token");
-            Enumeration<String> enumeration = request.getHeaderNames();
-            while(enumeration.hasMoreElements()){
-                String key = enumeration.nextElement();
-                log.warn(key + ": "+ request.getHeader(key));
-            }
-
-            if (StringUtils.hasText(accessToken)){
-                Wrapper<String> wrap = iUserService.authVerify(secret,accessToken);
-                if (wrap.success() && wrap.data().equals("true")){
-                    return true;
-                }
-                response.setStatus(403);
-                return false;
-            }
-            response.setStatus(403);
-            return false;
+        if (Objects.nonNull(apiPass)){
+            return true;
         }
-        return true;
+        String accessToken = request.getHeader("ch_access_token");
+        Enumeration<String> enumeration = request.getHeaderNames();
+        while(enumeration.hasMoreElements()){
+            String key = enumeration.nextElement();
+            log.warn(key + ": "+ request.getHeader(key));
+        }
+
+        if (StringUtils.hasText(accessToken)){
+            Wrapper<String> wrap = iUserService.authVerify(secret,accessToken);
+            if (wrap.success() && wrap.data().equals("true")){
+                return true;
+            }
+        }
+        log.warn("调用{}接口时被拦截",method.getName());
+        response.setStatus(403);
+        return false;
     }
 }

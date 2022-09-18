@@ -16,7 +16,7 @@ public class CommentResponseVO {
 
     private List<CommentResponseVO> childrenList;
 
-    public record User(Integer id,String nickName,String avatar){}
+    public record User(Integer id,String nickName,boolean isAuthor,String avatar){}
 
     public Integer getId() {
         return id;

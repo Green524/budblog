@@ -18,9 +18,26 @@ public class CommentController {
     @Resource
     private ICommentService iCommentService;
 
+    /**
+     * 给网页使用
+     * @param commentVO
+     * @return
+     */
     @PostMapping("/add")
     @ApiPass
     public Wrapper<Comment> add(@RequestBody CommentVO commentVO){
+        commentVO.setIsAuthor(false);
+        return iCommentService.insert(commentVO);
+    }
+
+    /**
+     * 给客户端后台管理使用
+     * @param commentVO
+     * @return
+     */
+    @PostMapping("/bs/add")
+    public Wrapper<Comment> backstageAdd(@RequestBody CommentVO commentVO){
+        commentVO.setIsAuthor(true);
         return iCommentService.insert(commentVO);
     }
 
@@ -30,13 +47,24 @@ public class CommentController {
     }
 
     /**
-     * 两级数评论
+     * 两级数评论(网页)
      * @param commentVO
      * @return
      */
     @GetMapping("/get/byarticleid")
     @ApiPass
     public Wrapper<PageInfo<CommentResponseVO>> selectByArticleId(CommentVO commentVO){
+        commentVO.setIsAuthor(false);
+        return iCommentService.selectByArticleId(commentVO);
+    }
+    /**
+     * 两级数评论(后台)
+     * @param commentVO
+     * @return
+     */
+    @GetMapping("/bs/get/byarticleid")
+    public Wrapper<PageInfo<CommentResponseVO>> backstageSelectByArticleId(CommentVO commentVO){
+        commentVO.setIsAuthor(true);
         return iCommentService.selectByArticleId(commentVO);
     }
 

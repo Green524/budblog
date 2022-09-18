@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.text.SimpleDateFormat;
+
 public class JsonUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -13,6 +15,7 @@ public class JsonUtil {
             if (nonNull){
                 objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
             }
+            objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException jpe) {
             throw new RuntimeException(jpe.getMessage());
