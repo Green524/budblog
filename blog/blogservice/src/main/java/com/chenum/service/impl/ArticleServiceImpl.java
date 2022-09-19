@@ -12,6 +12,7 @@ import com.chenum.service.IArticleService;
 import com.chenum.util.BeanUtils;
 import com.chenum.util.JsonUtil;
 import com.chenum.util.MarkdownUtil;
+import com.chenum.util.WordUtil;
 import com.chenum.vo.ArticleResponseVO;
 import com.chenum.vo.ArticleVO;
 import com.github.pagehelper.PageInfo;
@@ -38,6 +39,7 @@ public class ArticleServiceImpl implements IArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(articleVO,article,SERIAL_VERSION_UID);
         article.setLastReviewer("[]");
+        article.setWordCount(WordUtil.count(article.getContent()));
         int updates = articleMapper.insert(article);
         if (updates == 0){
             throw new BusinessException(BaseEnum.INERT_ERROR);
@@ -77,6 +79,7 @@ public class ArticleServiceImpl implements IArticleService {
         BeanUtils.copyProperties(articleVO,article,"id");
         article.setUpdateTime(new Date());
         article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
+        article.setWordCount(WordUtil.count(article.getContent()));
         articleMapper.updateByPrimaryKeySelective(article);
         return WrapMapper.ok(getArticleResponseVO(articleMapper.selectByPrimaryKey(id)));
     }
