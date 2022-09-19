@@ -9,6 +9,7 @@
         <result column="author" jdbcType="OTHER" property="author"/>
         <result column="content_tag" jdbcType="VARCHAR" property="contentTag"/>
         <result column="word_count" jdbcType="BIGINT" property="wordCount"/>
+        <result column="read_time" jdbcType="INTEGER" property="readTime"/>
         <result column="is_like" jdbcType="BIT" property="isLike"/>
         <result column="is_comment" jdbcType="BIT" property="isComment"/>
         <result column="is_admiration" jdbcType="BIT" property="isAdmiration"/>
@@ -19,7 +20,7 @@
         <result column="last_reviewer" jdbcType="VARCHAR" property="lastReviewer"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, title, content, markdown, author, content_tag, word_count, contribution,is_like, is_comment,
+        id, title, content, markdown, author, content_tag, word_count, read_time,contribution,is_like, is_comment,
     is_admiration, status,creator, create_time, update_time, last_reviewer
     </sql>
     <sql id="Conditional_List">
@@ -44,6 +45,9 @@
         </if>
         <if test="wordCount != null">
             and word_count = #{wordCount}
+        </if>
+        <if test="readTime != null">
+            and read_time = #{readTime}
         </if>
         <if test="isLike != null">
             and is_like = #{isLike}
@@ -100,13 +104,13 @@
         </selectKey>
         insert into tb_article (id, title, content,
         markdown, author, content_tag,
-        word_count, is_like, is_comment,
+        word_count,read_time, is_like, is_comment,
         is_admiration, status,creator, create_time,
         update_time, last_reviewer, contribution
         )
         values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
         #{markdown,jdbcType=VARCHAR}, #{author,jdbcType=OTHER}, #{contentTag,jdbcType=VARCHAR},
-        #{wordCount,jdbcType=BIGINT}, #{isLike,jdbcType=BIT}, #{isComment,jdbcType=BIT},
+        #{wordCount,jdbcType=BIGINT},#{readTime,jdbcType=INTEGER}, #{isLike,jdbcType=BIT}, #{isComment,jdbcType=BIT},
         #{isAdmiration,jdbcType=BIT}, #{status,jdbcType=BIT},#{creator,jdbcType=VARCHAR},
         #{createTime,jdbcType=TIMESTAMP},
         #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=VARCHAR}, #{contribution,jdbcType=OTHER}
@@ -139,6 +143,9 @@
             </if>
             <if test="wordCount != null">
                 word_count,
+            </if>
+            <if test="readTime != null">
+                read_time,
             </if>
             <if test="isLike != null">
                 is_like,
@@ -190,6 +197,9 @@
             <if test="wordCount != null">
                 #{wordCount,jdbcType=BIGINT},
             </if>
+            <if test="readTime != null">
+                #{readTime,jdbcType=INTEGER},
+            </if>
             <if test="isLike != null">
                 #{isLike,jdbcType=BIT},
             </if>
@@ -240,6 +250,9 @@
             <if test="wordCount != null">
                 word_count = #{wordCount,jdbcType=BIGINT},
             </if>
+            <if test="readTime != null">
+                read_time = #{readTime,jdbcType=INTEGER},
+            </if>
             <if test="isLike != null">
                 is_like = #{isLike,jdbcType=BIT},
             </if>
@@ -278,6 +291,7 @@
             author        = #{author,jdbcType=OTHER},
             content_tag   = #{contentTag,jdbcType=VARCHAR},
             word_count    = #{wordCount,jdbcType=BIGINT},
+            read_time     = #{readTime,jdbcType=INTEGER},
             is_like       = #{isLike,jdbcType=BIT},
             is_comment    = #{isComment,jdbcType=BIT},
             is_admiration = #{isAdmiration,jdbcType=BIT},

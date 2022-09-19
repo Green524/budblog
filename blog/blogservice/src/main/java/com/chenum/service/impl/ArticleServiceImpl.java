@@ -39,7 +39,10 @@ public class ArticleServiceImpl implements IArticleService {
         Article article = new Article();
         BeanUtils.copyProperties(articleVO,article,SERIAL_VERSION_UID);
         article.setLastReviewer("[]");
-        article.setWordCount(WordUtil.count(article.getContent()));
+        String content = article.getContent();
+        article.setWordCount(WordUtil.count(content));
+        float readTime = WordUtil.readTime(article.getWordCount(),content);
+        article.setReadTime((int) Math.ceil(readTime));
         int updates = articleMapper.insert(article);
         if (updates == 0){
             throw new BusinessException(BaseEnum.INERT_ERROR);
@@ -76,10 +79,16 @@ public class ArticleServiceImpl implements IArticleService {
         if (Objects.isNull(article)){
             throw new BusinessException(BaseEnum.SELECT_ERROR);
         }
+        if (article.getContent().length() != articleVO.getContent().length()){
+            String content = article.getContent();
+            article.setWordCount(WordUtil.count(content));
+            float readTime = WordUtil.readTime(article.getWordCount(),content);
+            article.setReadTime((int) Math.ceil(readTime));
+        }
         BeanUtils.copyProperties(articleVO,article,"id");
         article.setUpdateTime(new Date());
         article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
-        article.setWordCount(WordUtil.count(article.getContent()));
+
         articleMapper.updateByPrimaryKeySelective(article);
         return WrapMapper.ok(getArticleResponseVO(articleMapper.selectByPrimaryKey(id)));
     }

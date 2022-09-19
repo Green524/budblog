@@ -18,6 +18,8 @@ public class Article implements Serializable {
 
     private Long wordCount;
 
+    private Integer readTime;
+
     private Boolean isLike;
 
     private Boolean isComment;
@@ -166,24 +168,36 @@ public class Article implements Serializable {
         this.status = status;
     }
 
+    public Integer getReadTime() {
+        return readTime;
+    }
+
+    public Article setReadTime(Integer readTime) {
+        this.readTime = readTime;
+        return this;
+    }
+
     @Override
     public String toString() {
-        return "Article{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", markdown='" + markdown + '\'' +
-                ", author='" + author + '\'' +
-                ", contentTag='" + contentTag + '\'' +
-                ", wordCount=" + wordCount +
-                ", isLike=" + isLike +
-                ", isComment=" + isComment +
-                ", isAdmiration=" + isAdmiration +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", lastReviewer=" + lastReviewer +
-                ", contribution='" + contribution + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("Article{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", content='").append(content).append('\'');
+        sb.append(", markdown='").append(markdown).append('\'');
+        sb.append(", author='").append(author).append('\'');
+        sb.append(", contentTag='").append(contentTag).append('\'');
+        sb.append(", wordCount=").append(wordCount);
+        sb.append(", readTime=").append(readTime);
+        sb.append(", isLike=").append(isLike);
+        sb.append(", isComment=").append(isComment);
+        sb.append(", isAdmiration=").append(isAdmiration);
+        sb.append(", status=").append(status);
+        sb.append(", creator='").append(creator).append('\'');
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", lastReviewer='").append(lastReviewer).append('\'');
+        sb.append(", contribution='").append(contribution).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
