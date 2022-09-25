@@ -1,6 +1,7 @@
 package com.chenum.controller;
 
 import com.chenum.annotation.ApiPass;
+import com.chenum.po.Article;
 import com.chenum.response.Wrapper;
 import com.chenum.service.IArticleService;
 import com.chenum.vo.ArticleResponseVO;
@@ -31,10 +32,18 @@ public class ArticleController {
     public Wrapper<Boolean> del(@RequestBody ArticleVO articleVO){
         return iArticleService.del(articleVO);
     }
+    @GetMapping("/admin/query/page")
+    public Wrapper<PageInfo<Article>> adminQueryPage(ArticleVO articleVO){
+        System.out.println(articleVO.getPageNum());
+        System.out.println(articleVO.getPageSize());
+        return iArticleService.adminQueryPage(articleVO);
+    }
 
-    @GetMapping("/query/page")
+    @GetMapping(value = "/query/page")
     @ApiPass
     public Wrapper<PageInfo<ArticleResponseVO>> selectByPage(ArticleVO articleVO){
+        System.out.println(articleVO.getPageNum());
+        System.out.println(articleVO.getPageSize());
         return iArticleService.selectByPage(articleVO);
     }
 

@@ -22,6 +22,8 @@ public class ArticleVO extends BaseVO {
 
     private Boolean isAdmiration;
 
+    private Boolean isPublish;
+
     private String creator;
 
     private List<Object> contribution;
@@ -126,21 +128,31 @@ public class ArticleVO extends BaseVO {
         this.updateTime = updateTime;
     }
 
+    public Boolean getIsPublish() {
+        return isPublish;
+    }
+
+    public void setIsPublish(Boolean publish) {
+        isPublish = publish;
+    }
+
     @Override
     public String toString() {
-        return "ArticleVO{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", author=" + author +
-                ", contentTag='" + contentTag + '\'' +
-                ", isLike=" + isLike +
-                ", isComment=" + isComment +
-                ", isAdmiration=" + isAdmiration +
-                ", creator='" + creator + '\'' +
-                ", contribution='" + contribution + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
+        final StringBuffer sb = new StringBuffer("ArticleVO{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", content='").append(content).append('\'');
+        sb.append(", author=").append(author);
+        sb.append(", contentTag='").append(contentTag).append('\'');
+        sb.append(", isLike=").append(isLike);
+        sb.append(", isComment=").append(isComment);
+        sb.append(", isAdmiration=").append(isAdmiration);
+        sb.append(", isPublish=").append(isPublish);
+        sb.append(", creator='").append(creator).append('\'');
+        sb.append(", contribution=").append(contribution);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append('}');
+        return sb.toString();
     }
 }

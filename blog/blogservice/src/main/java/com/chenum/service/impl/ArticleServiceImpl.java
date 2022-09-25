@@ -43,6 +43,10 @@ public class ArticleServiceImpl implements IArticleService {
         article.setWordCount(WordUtil.count(content));
         float readTime = WordUtil.readTime(article.getWordCount(),content);
         article.setReadTime((int) Math.ceil(readTime));
+        if (Objects.nonNull(articleVO.getIsPublish()) && articleVO.getIsPublish()){
+            article.setPublishTime(new Date());
+            article.setStatus((byte)120);
+        }
         int updates = articleMapper.insert(article);
         if (updates == 0){
             throw new BusinessException(BaseEnum.INERT_ERROR);
@@ -54,11 +58,26 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     @ParameterCheckAdvice(parameters = {"id"})
     public Wrapper<Boolean> del(ArticleVO articleVO) {
-        int deletes = articleMapper.deleteByPrimaryKey(articleVO.getId());
-        if (deletes == 0){
-            WrapMapper.ok(Boolean.FALSE);
+        String id = articleVO.getId();
+        Article article = articleMapper.selectByPrimaryKey(id);
+
+        article.setStatus((byte) 120);
+        article.setUpdateTime(new Date());
+        article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
+
+        int updates = articleMapper.updateByPrimaryKeySelective(article);
+        if (updates == 0){
+            return WrapMapper.ok(Boolean.FALSE);
         }
         return WrapMapper.ok(Boolean.TRUE);
+    }
+
+    @Override
+    @Page
+    public Wrapper<PageInfo<Article>> adminQueryPage(ArticleVO articleVO) {
+        Map<String,Object> params = BeanUtils.entityToMap(articleVO);
+        List<Article> records = articleMapper.selectByPage(params);
+        return WrapMapper.ok(PageInfo.of(records));
     }
 
     @Override

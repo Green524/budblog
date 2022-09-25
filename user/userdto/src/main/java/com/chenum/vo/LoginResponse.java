@@ -1,5 +1,5 @@
 package com.chenum.vo;
 
-public record LoginResponse(String ch_access_token,int expires) {
+public record LoginResponse(String access_token,int expires) {
 
 }

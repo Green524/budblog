@@ -20,6 +20,8 @@ public class Article implements Serializable {
 
     private Integer readTime;
 
+    private String contribution;
+
     private Boolean isLike;
 
     private Boolean isComment;
@@ -28,6 +30,8 @@ public class Article implements Serializable {
 
     private Byte status;
 
+    private Date publishTime;
+
     private String creator;
 
     private Date createTime;
@@ -35,8 +39,6 @@ public class Article implements Serializable {
     private Date updateTime;
 
     private String lastReviewer;
-
-    private String contribution;
 
     private static final long serialVersionUID = 1L;
 
@@ -172,9 +174,16 @@ public class Article implements Serializable {
         return readTime;
     }
 
-    public Article setReadTime(Integer readTime) {
+    public void setReadTime(Integer readTime) {
         this.readTime = readTime;
-        return this;
+    }
+
+    public Date getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(Date publishTime) {
+        this.publishTime = publishTime;
     }
 
     @Override
@@ -192,6 +201,7 @@ public class Article implements Serializable {
         sb.append(", isComment=").append(isComment);
         sb.append(", isAdmiration=").append(isAdmiration);
         sb.append(", status=").append(status);
+        sb.append(", publishTime=").append(publishTime);
         sb.append(", creator='").append(creator).append('\'');
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
