@@ -25,12 +25,13 @@ public class ArticleController {
 
     @PutMapping("/update")
     public Wrapper<ArticleResponseVO> update(@RequestBody ArticleVO articleVO){
+        System.out.println(articleVO);
         return iArticleService.updateOne(articleVO);
     }
 
-    @DeleteMapping("/del")
-    public Wrapper<Boolean> del(@RequestBody ArticleVO articleVO){
-        return iArticleService.del(articleVO);
+    @DeleteMapping("/del/{id}")
+    public Wrapper<Boolean> del(@PathVariable String id){
+        return iArticleService.del(id);
     }
     @GetMapping("/admin/query/page")
     public Wrapper<PageInfo<Article>> adminQueryPage(ArticleVO articleVO){

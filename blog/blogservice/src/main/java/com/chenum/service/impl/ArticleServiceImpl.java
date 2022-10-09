@@ -45,7 +45,9 @@ public class ArticleServiceImpl implements IArticleService {
         article.setReadTime((int) Math.ceil(readTime));
         if (Objects.nonNull(articleVO.getIsPublish()) && articleVO.getIsPublish()){
             article.setPublishTime(new Date());
-            article.setStatus((byte)120);
+            article.setStatus((byte)110);
+        }else{
+            article.setStatus((byte)100);
         }
         int updates = articleMapper.insert(article);
         if (updates == 0){
@@ -57,13 +59,11 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     @ParameterCheckAdvice(parameters = {"id"})
-    public Wrapper<Boolean> del(ArticleVO articleVO) {
-        String id = articleVO.getId();
+    public Wrapper<Boolean> del(String id) {
         Article article = articleMapper.selectByPrimaryKey(id);
 
         article.setStatus((byte) 120);
         article.setUpdateTime(new Date());
-        article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
 
         int updates = articleMapper.updateByPrimaryKeySelective(article);
         if (updates == 0){
@@ -107,7 +107,12 @@ public class ArticleServiceImpl implements IArticleService {
         BeanUtils.copyProperties(articleVO,article,"id");
         article.setUpdateTime(new Date());
         article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
-
+        if (Objects.nonNull(articleVO.getIsPublish()) && articleVO.getIsPublish()){
+            article.setPublishTime(new Date());
+            article.setStatus((byte)110);
+        }else{
+            article.setStatus((byte)100);
+        }
         articleMapper.updateByPrimaryKeySelective(article);
         return WrapMapper.ok(getArticleResponseVO(articleMapper.selectByPrimaryKey(id)));
     }

@@ -11,7 +11,7 @@ public interface IArticleService {
     Wrapper<ArticleResponseVO> add(ArticleVO articleVO);
 
 
-    Wrapper<Boolean> del(ArticleVO articleVO);
+    Wrapper<Boolean> del(String id);
 
 
     Wrapper<PageInfo<ArticleResponseVO>> selectByPage(ArticleVO articleVO);

@@ -51,19 +51,16 @@ public class ServiceAspect {
                 value = new Date();
                 field.set(arg, value);
             }
-            if (value instanceof String valueOfStr) {
+            if (Objects.isNull(value)){
+                log.error("parameter {} is {}", parameter, VField.NULL);
+                throw new BusinessException(BaseEnum.PARAMS_ERROR);
+            }else if (value instanceof String valueOfStr) {
                 if (StringUtils.isEmpty(valueOfStr)) {
                     log.error("parameter {} is {}", parameter, VField.NULL);
                     throw new BusinessException(BaseEnum.PARAMS_ERROR.setData(valueOfStr));
                 }
             }else if(value.getClass().isArray()){
                 if (Array.getLength(value) == 0){
-                    log.error("parameter {} is {}", parameter, VField.NULL);
-                    throw new BusinessException(BaseEnum.PARAMS_ERROR);
-                }
-            }
-            else {
-                if (Objects.isNull(value)) {
                     log.error("parameter {} is {}", parameter, VField.NULL);
                     throw new BusinessException(BaseEnum.PARAMS_ERROR);
                 }

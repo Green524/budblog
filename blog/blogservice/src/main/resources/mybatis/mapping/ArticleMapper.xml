@@ -114,14 +114,14 @@
         markdown, author, content_tag,
         word_count,read_time,contribution, is_like, is_comment,
         is_admiration, publish_time,status,creator, create_time,
-        update_time, last_reviewer, contribution
+        update_time, last_reviewer
         )
         values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
         #{markdown,jdbcType=VARCHAR}, #{author,jdbcType=OTHER}, #{contentTag,jdbcType=VARCHAR},
         #{wordCount,jdbcType=BIGINT},#{readTime,jdbcType=INTEGER}, #{contribution,jdbcType=OTHER},#{isLike,jdbcType=BIT}, #{isComment,jdbcType=BIT},
         #{isAdmiration,jdbcType=BIT}, #{publishTime,jdbcType=TIMESTAMP},#{status,jdbcType=BIT},#{creator,jdbcType=VARCHAR},
         #{createTime,jdbcType=TIMESTAMP},
-        #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=VARCHAR}, #{contribution,jdbcType=OTHER}
+        #{updateTime,jdbcType=TIMESTAMP}, #{lastReviewer,jdbcType=VARCHAR}
         )
 
     </insert>
@@ -185,9 +185,6 @@
             <if test="lastReviewer != null">
                 last_reviewer,
             </if>
-            <if test="contribution != null">
-                contribution,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -243,9 +240,6 @@
             </if>
             <if test="lastReviewer != null">
                 #{lastReviewer,jdbcType=TIMESTAMP},
-            </if>
-            <if test="contribution != null">
-                #{contribution,jdbcType=LONGVARCHAR},
             </if>
         </trim>
     </insert>
