@@ -25,7 +25,6 @@ public class ArticleController {
 
     @PutMapping("/update")
     public Wrapper<ArticleResponseVO> update(@RequestBody ArticleVO articleVO){
-        System.out.println(articleVO);
         return iArticleService.updateOne(articleVO);
     }
 
@@ -35,16 +34,12 @@ public class ArticleController {
     }
     @GetMapping("/admin/query/page")
     public Wrapper<PageInfo<Article>> adminQueryPage(ArticleVO articleVO){
-        System.out.println(articleVO.getPageNum());
-        System.out.println(articleVO.getPageSize());
         return iArticleService.adminQueryPage(articleVO);
     }
 
     @GetMapping(value = "/query/page")
     @ApiPass
     public Wrapper<PageInfo<ArticleResponseVO>> selectByPage(ArticleVO articleVO){
-        System.out.println(articleVO.getPageNum());
-        System.out.println(articleVO.getPageSize());
         return iArticleService.selectByPage(articleVO);
     }
 

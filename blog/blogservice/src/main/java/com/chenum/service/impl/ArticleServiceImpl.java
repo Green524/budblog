@@ -43,12 +43,7 @@ public class ArticleServiceImpl implements IArticleService {
         article.setWordCount(WordUtil.count(content));
         float readTime = WordUtil.readTime(article.getWordCount(),content);
         article.setReadTime((int) Math.ceil(readTime));
-        if (Objects.nonNull(articleVO.getIsPublish()) && articleVO.getIsPublish()){
-            article.setPublishTime(new Date());
-            article.setStatus((byte)110);
-        }else{
-            article.setStatus((byte)100);
-        }
+        setState(articleVO, article);
         int updates = articleMapper.insert(article);
         if (updates == 0){
             throw new BusinessException(BaseEnum.INERT_ERROR);
@@ -84,6 +79,7 @@ public class ArticleServiceImpl implements IArticleService {
     @Page
     public Wrapper<PageInfo<ArticleResponseVO>> selectByPage(ArticleVO articleVO) {
         Map<String,Object> params = BeanUtils.entityToMap(articleVO);
+        params.put("status",110);
         List<Article> records = articleMapper.selectByPage(params);
         List<ArticleResponseVO> voList = new ArrayList<>(records.size());
         records.forEach((article -> voList.add(getArticleResponseVO(article))));
@@ -107,14 +103,22 @@ public class ArticleServiceImpl implements IArticleService {
         BeanUtils.copyProperties(articleVO,article,"id");
         article.setUpdateTime(new Date());
         article.setLastReviewer(JsonUtil.toJsonString(List.of(articleVO.getCreator())));
+        setState(articleVO, article);
+        articleMapper.updateByPrimaryKeySelective(article);
+        return WrapMapper.ok(getArticleResponseVO(articleMapper.selectByPrimaryKey(id)));
+    }
+
+    private void setState(ArticleVO articleVO, Article article) {
         if (Objects.nonNull(articleVO.getIsPublish()) && articleVO.getIsPublish()){
-            article.setPublishTime(new Date());
+            if (Objects.nonNull(articleVO.getPublishTime())){
+                article.setPublishTime(articleVO.getPublishTime());
+            }else{
+                article.setPublishTime(new Date());
+            }
             article.setStatus((byte)110);
         }else{
             article.setStatus((byte)100);
         }
-        articleMapper.updateByPrimaryKeySelective(article);
-        return WrapMapper.ok(getArticleResponseVO(articleMapper.selectByPrimaryKey(id)));
     }
 
     @Override

@@ -32,6 +32,17 @@ public class ArticleVO extends BaseVO {
 
     private Date updateTime;
 
+    private Date publishTime;
+
+    public Date getPublishTime() {
+        return publishTime;
+    }
+
+    public ArticleVO setPublishTime(Date publishTime) {
+        this.publishTime = publishTime;
+        return this;
+    }
+
     public String getId() {
         return id;
     }
